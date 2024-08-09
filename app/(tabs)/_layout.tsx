@@ -1,5 +1,5 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from '@expo/vector-icons/FontAwesome6';
 import { Link, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 
@@ -29,29 +29,36 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: 'Swimmers',
+          tabBarIcon: ({ color }) => <TabBarIcon name="person-swimming" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="relay"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Relay Setup',
+          tabBarIcon: ({ color }) => <TabBarIcon name="stopwatch" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="ranks"
+        options={{
+          title: 'Rankings',
+          tabBarIcon: ({ color }) => <TabBarIcon name="ranking-star" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="converter"
+        options={{
+          title: 'Time Converter',
+          tabBarIcon: ({ color }) => <TabBarIcon name="clock-rotate-left" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="help"
+        options={{
+          title: 'Help',
+          tabBarIcon: ({ color }) => <TabBarIcon name="circle-info" color={color} />,
         }}
       />
     </Tabs>
