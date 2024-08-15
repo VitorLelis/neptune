@@ -74,7 +74,6 @@ export default function ConverterScreen() {
         value={time}
         onChangeText={setTime}
         placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
-        keyboardType="numeric"
       />
 
       <Button title="Convert" onPress={handleConvert} />
