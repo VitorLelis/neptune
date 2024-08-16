@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, Button} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text, View } from '@/components/Themed';
-import { convertTime } from '@/constants/conversionUtils';
+import { convertTime } from '@/utils/conversionUtils';
 
 export default function ConverterScreen() {
   const [stroke, setStroke] = useState('Freestyle');
@@ -23,7 +23,6 @@ export default function ConverterScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Time Converter</Text>
 
       <Text style={styles.label}>Stroke</Text>
       <Picker

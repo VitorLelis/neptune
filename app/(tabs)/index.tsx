@@ -57,7 +57,6 @@ export default function SwimmersScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Swimmers</Text>
       <View style={styles.buttonContainer}>
         <Button title="Sort by Name" onPress={() => handleSort('name')} />
         <Button title="Sort by Gender" onPress={() => handleSort('gender')} />
