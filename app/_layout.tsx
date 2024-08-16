@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { SQLiteProvider } from 'expo-sqlite';
+import { initDatabase } from '@/database/initDatabase';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,10 +51,13 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <SQLiteProvider databaseName='neptune.db' onInit={initDatabase}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="newSwimmer" options={{ title: "Add New Swimmer" }} />
+        </Stack>
+      </ThemeProvider>
+    </SQLiteProvider>
   );
 }

@@ -31,6 +31,20 @@ export default function TabLayout() {
         options={{
           title: 'Swimmers',
           tabBarIcon: ({ color }) => <TabBarIcon name="person-swimming" color={color} />,
+          headerRight: () => (
+            <Link href="/newSwimmer" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="user-plus"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
         }}
       />
       <Tabs.Screen
