@@ -6,7 +6,7 @@ import { useDatabase } from '@/database/useDatabase';
 
 export default function NewSwimmersScreen() {
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('M');
   const [year_of_birth, setYear] = useState('');
 
   const database = useDatabase()
@@ -41,7 +41,6 @@ export default function NewSwimmersScreen() {
         selectedValue={gender}
         onValueChange={(itemValue) => setGender(itemValue)}
       >
-        <Picker.Item label="Select Gender" value="" />
         <Picker.Item label="Male" value="M" />
         <Picker.Item label="Female" value="F" />
       </Picker>

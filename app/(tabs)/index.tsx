@@ -1,4 +1,4 @@
-import { Button, FlatList, StyleSheet } from 'react-native';
+import { Button, FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useDatabase, Swimmer } from '@/database/useDatabase';
 import { useEffect, useState } from 'react';
@@ -50,9 +50,11 @@ export default function SwimmersScreen() {
   };
 
   const renderItem = ({ item }: { item: Swimmer }) => (
-    <View style={styles.item}>
-      <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
-    </View>
+    <Pressable>
+      <View style={styles.item}>
+        <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
+      </View>
+    </Pressable>
   );
 
   return (

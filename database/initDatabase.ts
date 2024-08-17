@@ -20,6 +20,7 @@ export async function initDatabase(database: SQLiteDatabase) {
             swimmer_id INTEGER NOT NULL,
             event_id INTEGER NOT NULL,
             time TEXT,
+            date TEXT,
             PRIMARY KEY (swimmer_id, event_id),
             FOREIGN KEY (swimmer_id) REFERENCES swimmers(id),
             FOREIGN KEY (event_id) REFERENCES events(id)
