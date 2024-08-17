@@ -12,7 +12,7 @@ export function useDatabase(){
     async function createSwimmer(data:Omit<Swimmer,"id">) {
         const query = "INSERT INTO swimmers (name,gender,year_of_birth) VALUES (?,?,?);"
         try {
-            await database.getAllAsync(query,data.name, data.gender, data.year_of_birth)
+            await database.getAllAsync(query,[data.name, data.gender, data.year_of_birth])
         } catch (error) {
             throw error
         }
@@ -28,5 +28,15 @@ export function useDatabase(){
         }
     }
 
-    return {createSwimmer, listSwimmers}
+    async function infoSwimmer(id: number) {
+        const query = "SELECT * FROM swimmers WHERE id = ?"
+        try {
+            const response = await database.getFirstAsync<Swimmer>(query, id)
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
+    return {createSwimmer, listSwimmers, infoSwimmer}
 }

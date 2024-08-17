@@ -55,7 +55,8 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="newSwimmer" options={{ title: "Add New Swimmer" }} />
+          <Stack.Screen name="[id]" options={{ title: "Swimmmer Info" }} />
+          <Stack.Screen name="newSwimmer" options={{ title: "Add New Swimmer"}} />
         </Stack>
       </ThemeProvider>
     </SQLiteProvider>

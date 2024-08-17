@@ -2,6 +2,7 @@ import { Button, FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useDatabase, Swimmer } from '@/database/useDatabase';
 import { useEffect, useState } from 'react';
+import { router } from 'expo-router';
 
 export default function SwimmersScreen() {
   const [swimmersList, setSwimmersList] = useState<Swimmer[]>([]);
@@ -49,14 +50,6 @@ export default function SwimmersScreen() {
     sortData(swimmersList,key,sortOrder)
   };
 
-  const renderItem = ({ item }: { item: Swimmer }) => (
-    <Pressable>
-      <View style={styles.item}>
-        <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
-      </View>
-    </Pressable>
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -67,7 +60,12 @@ export default function SwimmersScreen() {
       <FlatList
         data={sortedData}
         keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
+        renderItem={({ item }: { item: Swimmer }) => (
+          <Pressable onPress={() => router.navigate(`/${item.id}`)}>
+            <View style={styles.item}>
+              <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
+            </View>
+          </Pressable>)}
       />
     </View>
   );
