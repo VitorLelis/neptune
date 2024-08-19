@@ -32,7 +32,7 @@ export default function TabLayout() {
           title: 'Swimmers',
           tabBarIcon: ({ color }) => <TabBarIcon name="person-swimming" color={color} />,
           headerRight: () => (
-            <Link href="/newSwimmer" asChild>
+            <Link href="/addSwimmer" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome

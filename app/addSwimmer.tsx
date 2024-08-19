@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useDatabase } from '@/database/useDatabase';
 
-export default function NewSwimmersScreen() {
+export default function AddSwimmersScreen() {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('M');
   const [year_of_birth, setYear] = useState('');

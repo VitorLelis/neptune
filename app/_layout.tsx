@@ -56,7 +56,7 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="[id]" options={{ title: "Swimmmer Info" }} />
-          <Stack.Screen name="newSwimmer" options={{ title: "Add New Swimmer"}} />
+          <Stack.Screen name="addSwimmer" options={{ title: "Add New Swimmer"}} />
           <Stack.Screen name="editSwimmer" options={{ title: "Edit Swimmer Info"}} />
         </Stack>
       </ThemeProvider>
