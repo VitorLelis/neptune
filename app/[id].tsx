@@ -1,5 +1,5 @@
 import { View,Text } from "@/components/Themed";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome6';
 import { TouchableOpacity,StyleSheet } from "react-native";
@@ -29,6 +29,18 @@ export default function SwimmerInfo(){
             })
         }
     }, [params.id])
+
+    const handleEditPress = () => {
+        router.navigate({
+          pathname: '/editSwimmer',
+          params: {
+            id: params.id,
+            name: data.name,
+            gender: data.gender,
+            year_of_birth: data.year_of_birth.toString(),
+          }
+        });
+      };
     
     return(
         <View>
@@ -37,7 +49,7 @@ export default function SwimmerInfo(){
             <Text> Gender: {data.gender}</Text>
             <Text> Year of Birth: {data.year_of_birth}</Text>
             
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleEditPress}>
               <Text style={styles.buttonText}>Edit Info</Text>
               <FontAwesome name="edit" color="#fff"/>
             </TouchableOpacity>

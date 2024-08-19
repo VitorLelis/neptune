@@ -38,5 +38,14 @@ export function useDatabase(){
         }
     }
 
-    return {createSwimmer, listSwimmers, infoSwimmer}
+    async function updateSwimmer(data:Swimmer) {
+        const query = "UPDATE swimmers SET name = ?, gender = ?, year_of_birth = ? WHERE id = ?"
+        try {
+            await database.getAllAsync(query,[data.name, data.gender, data.year_of_birth, data.id])
+        } catch (error) {
+            throw error
+        }
+    }
+
+    return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer}
 }
