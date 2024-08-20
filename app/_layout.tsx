@@ -9,6 +9,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 import { SQLiteProvider } from 'expo-sqlite';
 import { initDatabase } from '@/database/initDatabase';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,14 +53,17 @@ function RootLayoutNav() {
 
   return (
     <SQLiteProvider databaseName='neptune.db' onInit={initDatabase}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="[id]" options={{ title: "Swimmmer Info" }} />
-          <Stack.Screen name="addSwimmer" options={{ title: "Add New Swimmer"}} />
-          <Stack.Screen name="editSwimmer" options={{ title: "Edit Swimmer Info"}} />
-        </Stack>
-      </ThemeProvider>
+      <ActionSheetProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="[id]" options={{ title: "Swimmmer Info" }} />
+            <Stack.Screen name="addSwimmer" options={{ title: "Add New Swimmer"}} />
+            <Stack.Screen name="editSwimmer" options={{ title: "Edit Swimmer Info"}} />
+            <Stack.Screen name="addTime" options={{ title: "Add New Time"}} />
+          </Stack>
+        </ThemeProvider>
+      </ActionSheetProvider>
     </SQLiteProvider>
   );
 }

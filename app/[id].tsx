@@ -48,10 +48,10 @@ export default function SwimmerInfo(){
               break;
           case 1:
               // Navigate to Add Time screen
-              /*router.navigate({
+              router.navigate({
                   pathname: '/addTime',
                   params: { id: params.id }
-              });*/
+              });
               break;
           case 2:
               // Handle Delete Swimmer action

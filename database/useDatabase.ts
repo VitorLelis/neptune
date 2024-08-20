@@ -7,6 +7,20 @@ export type Swimmer = {
     year_of_birth: number
 }
 
+export type Event = {
+    id: number
+    distance: number
+    stroke: string
+    course: string
+}
+
+export type Time = {
+    swimmer_id: number
+    event_id: number
+    time: string
+    date: string
+}
+
 export function useDatabase(){
     const database = useSQLiteContext()
     async function createSwimmer(data:Omit<Swimmer,"id">) {
@@ -47,5 +61,51 @@ export function useDatabase(){
         }
     }
 
-    return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer}
+    async function addEvent(data: Omit<Event,"id">) {
+        const statement = await database.prepareAsync(
+            "INSERT INTO events (distance, stroke, course) VALUES ($distance, $stroke, $course)"
+          )
+      
+          try {
+            const result = await statement.executeAsync({
+              $distance: data.distance,
+              $stroke: data.stroke,
+              $course: data.course
+            })
+      
+            const insertedRowId = result.lastInsertRowId
+      
+            return { insertedRowId }
+          } catch (error) {
+            throw error
+          } finally {
+            await statement.finalizeAsync()
+          }
+    }
+
+    async function getEvent(data: Omit<Event,"id">) {
+        const query = "SELECT id FROM events WHERE distance = ? AND stroke = ? AND course = ?"
+        try {
+            const response = await database.getFirstAsync<{ id: number }>(query, [data.distance,data.stroke,data.course])
+            if (response && response.id !== undefined) {
+                return response.id;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async function addTime(data:Time) {
+        const query = "INSERT INTO times (swimmer_id,event_id,time,date) VALUES (?,?,?,?)"
+        try {
+            await database.getAllAsync(query, [data.swimmer_id,data.event_id,data.time,data.date])
+        } catch (error) {
+            throw error
+        }
+    }
+
+    return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
+        addEvent, getEvent, addTime}
 }

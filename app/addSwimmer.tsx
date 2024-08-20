@@ -16,8 +16,7 @@ export default function AddSwimmersScreen() {
         if (isNaN(Number(year_of_birth))){
             return Alert.alert("Year of Birth", "It must be a Number!")
         }
-        const response = await database.createSwimmer({name,gender,
-            year_of_birth : Number(year_of_birth)})
+        await database.createSwimmer({name,gender,year_of_birth : Number(year_of_birth)})
 
         Alert.alert("Swimmer created!")
     } catch (error) {
