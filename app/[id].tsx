@@ -7,7 +7,6 @@ import { useDatabase } from "@/database/useDatabase";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function SwimmerInfo(){
- 
     const [data, setData] = useState({
         name: "",
         gender: "",

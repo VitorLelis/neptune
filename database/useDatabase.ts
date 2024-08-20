@@ -15,6 +15,7 @@ export type Event = {
 }
 
 export type Time = {
+    id: number
     swimmer_id: number
     event_id: number
     time: string
@@ -97,7 +98,7 @@ export function useDatabase(){
         }
     }
 
-    async function addTime(data:Time) {
+    async function addTime(data:Omit<Time,"id">) {
         const query = "INSERT INTO times (swimmer_id,event_id,time,date) VALUES (?,?,?,?)"
         try {
             await database.getAllAsync(query, [data.swimmer_id,data.event_id,data.time,data.date])

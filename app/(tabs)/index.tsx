@@ -74,7 +74,7 @@ export default function SwimmersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   title: {
     fontSize: 24,
@@ -85,8 +85,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   item: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    backgroundColor: "#4184F8",
+    padding: 24,
+    borderRadius: 5,
+    gap: 18,
+    flexDirection: "row",
   },
 });
