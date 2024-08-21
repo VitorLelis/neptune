@@ -22,6 +22,14 @@ export type Time = {
     date: string
 }
 
+export type EventTime = {
+    distance: number
+    stroke: string
+    course: string
+    time: number
+    date: string
+}
+
 export function useDatabase(){
     const database = useSQLiteContext()
     async function createSwimmer(data:Omit<Swimmer,"id">) {
@@ -107,6 +115,18 @@ export function useDatabase(){
         }
     }
 
+    async function getSwimmerEventTime(id: number) {
+        const query = `SELECT events.distance, events.stroke, events.course, times.time, times.date
+                        FROM times INNER JOIN events ON times.event_id = events.id
+                        WHERE times.swimmer_id = ?`
+        try {
+            const response = database.getAllAsync<EventTime>(query,id)
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
-        addEvent, getEvent, addTime}
+        addEvent, getEvent, addTime, getSwimmerEventTime}
 }

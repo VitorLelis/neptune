@@ -38,7 +38,6 @@ export default function AddSwimmersScreen() {
               time: stringToTime(time),
               date})
         } else{
-          console.log("Just checkig")
             await database.addTime({
               swimmer_id: Number(params.id),
               event_id: Number(response), 

@@ -2,9 +2,11 @@ import { View,Text } from "@/components/Themed";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome6';
-import { TouchableOpacity,StyleSheet } from "react-native";
+import { TouchableOpacity,StyleSheet, FlatList, Pressable } from "react-native";
 import { useDatabase } from "@/database/useDatabase";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import convertEventTimes, { EventTimeItem } from "@/utils/eventTimesUtils";
+import timeToString from "@/utils/timeToString";
 
 export default function SwimmerInfo(){
     const [data, setData] = useState({
@@ -12,6 +14,8 @@ export default function SwimmerInfo(){
         gender: "",
         year_of_birth: 0
     })
+    const [eventList, setEventList] = useState<EventTimeItem[]>([])
+    const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
     const database = useDatabase();
     const params = useLocalSearchParams<{id :string}>();
@@ -28,8 +32,18 @@ export default function SwimmerInfo(){
                     })
                 }
             })
+            database.getSwimmerEventTime(Number(params.id)).then(response =>{
+                if (response) {
+                    const eventItens = convertEventTimes(response)
+                    setEventList(eventItens)
+                }
+            })
         }
     }, [params.id])
+
+    const handleEventPress = (key: string) => {
+        setExpandedKey(expandedKey === key ? null : key);
+      };
 
     const handleActionPress = (index: number) => {
       switch (index) {
@@ -92,9 +106,31 @@ export default function SwimmerInfo(){
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>TIMES</Text>
-        <Text>TODO: Picker event</Text>
-        <Text>TODO: Time Flatlist</Text>
+        <Text style={styles.cardTitle}>EVENTS</Text>
+        <FlatList
+        data={eventList}
+        keyExtractor={item => item.key}
+        renderItem={({ item }) => (
+          <View>
+            <Pressable onPress={() => handleEventPress(item.key)}>
+              <View style={styles.header}>
+                <Text>{item.key}</Text>
+              </View>
+            </Pressable>
+            {expandedKey === item.key && (
+              <FlatList
+                data={item.events}
+                keyExtractor={(event, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <View style={styles.nestedList}>
+                    <Text>({index+1}) {timeToString(item.time)} - {item.date}</Text>
+                  </View>
+                )}
+              />
+            )}
+          </View>
+        )}
+        />
       </View>
     </View>
   );
@@ -126,5 +162,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10
+  },
+  item: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  header: {
+    fontWeight: 'bold',
+    padding: 10,
+  },
+  nestedList: {
+    paddingLeft: 20,
   },
 });
