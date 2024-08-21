@@ -25,7 +25,7 @@ export default function AddSwimmersScreen() {
         if (!time.match(/^([0-5]?\d\:)?([0-5]\d\.\d{2})$/)){
             return Alert.alert("Time", "Not a valid time!")
         }
-        if (!date.match(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/)){
+        if (!date.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)){
             return Alert.alert("Date", "Not a valid date!")
         }
         const response = await database.getEvent({distance: Number(distance),stroke,course})
@@ -34,10 +34,11 @@ export default function AddSwimmersScreen() {
             const eventId = await database.addEvent({distance: Number(distance),stroke,course})
             await database.addTime({
               swimmer_id: Number(params.id),
-              event_id: Number(eventId), 
+              event_id: Number(eventId.insertedRowId), 
               time: stringToTime(time),
               date})
         } else{
+          console.log("Just checkig")
             await database.addTime({
               swimmer_id: Number(params.id),
               event_id: Number(response), 
@@ -98,7 +99,7 @@ export default function AddSwimmersScreen() {
         style={styles.input}
         value={date}
         onChangeText={setDate}
-        placeholder="Enter date (DD/MM/YYYY)"
+        placeholder="Enter date (YYYY-MM-DD)"
       />
 
     <Button title="Save" onPress={handleAddTime} />
