@@ -79,47 +79,52 @@ export default function SwimmerInfo(){
       );
   };
     
-    return(
-        <View style={{flex: 1}}>
-            <Text style={{fontSize: 20,fontWeight: 'bold',}}> INFO</Text>
-            <Text> Name: {data.name}</Text>
-            <Text> Gender: {data.gender}</Text>
-            <Text> Year of Birth: {data.year_of_birth}</Text>
-            
-            <Text style={{fontSize: 20,fontWeight: 'bold',}}> TIMES</Text>
-            <Text>TODO: Picker event</Text>
-            <Text>TODO: Time Flatlist</Text>
-            
-            <TouchableOpacity style={styles.fab} onPress={showActionSheet}>
-              <FontAwesome name="ellipsis-vertical" color="#fff" size={24} />
-            </TouchableOpacity>
-        </View>
-    )
+  return (
+    <View style={{ flex: 1, padding: 20 }}>
+      <View style={styles.card}>
+        <TouchableOpacity style={styles.fab} onPress={showActionSheet}>
+          <FontAwesome name="user-gear" color="#4184F8" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.cardTitle}>INFO</Text>
+        <Text>Name: {data.name}</Text>
+        <Text>Gender: {data.gender}</Text>
+        <Text>Year of Birth: {data.year_of_birth}</Text>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>TIMES</Text>
+        <Text>TODO: Picker event</Text>
+        <Text>TODO: Time Flatlist</Text>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    button: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 10,
-      backgroundColor: '#007AFF',
-      borderRadius: 5,
-    },
-    buttonText: {
-      color: '#fff',
-      marginRight: 8,
-      fontSize: 16,
-    },
-    fab: {
-      position: "absolute",
-      right: 20,
-      bottom: 20,
-      backgroundColor: "#007AFF",
-      borderRadius: 30,
-      width: 60,
-      height: 60,
-      justifyContent: "center",
-      alignItems: "center",
-      elevation: 5,
-    },
-  });
+  card: {
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#4184F8',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    position: 'relative'
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  fab: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    borderRadius: 30,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10
+  },
+});
