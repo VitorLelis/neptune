@@ -18,7 +18,7 @@ export type Time = {
     id: number
     swimmer_id: number
     event_id: number
-    time: string
+    time: number
     date: string
 }
 

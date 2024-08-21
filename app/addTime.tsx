@@ -5,6 +5,8 @@ import { Picker } from '@react-native-picker/picker';
 import { useDatabase } from '@/database/useDatabase';
 import { useLocalSearchParams } from 'expo-router';
 
+import stringToTime from '@/utils/stringToTime';
+
 export default function AddSwimmersScreen() {
     const [stroke, setStroke] = useState('Freestyle');
     const [distance, setDistance] = useState('50');
@@ -30,9 +32,17 @@ export default function AddSwimmersScreen() {
         
         if(!response){
             const eventId = await database.addEvent({distance: Number(distance),stroke,course})
-            await database.addTime({swimmer_id: Number(params.id),event_id: Number(eventId), time,date})
+            await database.addTime({
+              swimmer_id: Number(params.id),
+              event_id: Number(eventId), 
+              time: stringToTime(time),
+              date})
         } else{
-            await database.addTime({swimmer_id: Number(params.id),event_id: Number(response), time,date})
+            await database.addTime({
+              swimmer_id: Number(params.id),
+              event_id: Number(response), 
+              time: stringToTime(time),
+              date})
         }
 
         Alert.alert("Time added!")
