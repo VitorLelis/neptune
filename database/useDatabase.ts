@@ -145,9 +145,18 @@ export function useDatabase(){
           } catch (error) {
             throw error
           }
+    }
+
+    async function removeSwimmer(id:number) {
+        try {
+            await database.execAsync(`DELETE FROM times WHERE swimmer_id = ${id}`)
+            await database.execAsync(`DELETE FROM swimmers WHERE id = ${id}`)
+        } catch (error) {
+            throw error
         }
+    }
 
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
         addEvent, getEvent, addTime, updateTime, getSwimmerEventTime,
-        removeTime}
+        removeTime, removeSwimmer}
 }

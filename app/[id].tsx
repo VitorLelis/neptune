@@ -72,8 +72,18 @@ export default function SwimmerInfo(){
               });
               break;
           case 2:
-              // Handle Delete Swimmer action
-              // Implement your delete logic here
+            Alert.alert('Delete Swimmer', 'This will also delete the swimmer times!', [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => {
+                database.removeSwimmer(Number(params.id)),
+                getSwimmerInfo(),
+                router.navigate('/')
+              }
+              },
+            ]);
               break;
           default:
               break;
