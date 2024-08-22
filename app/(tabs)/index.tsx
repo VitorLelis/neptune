@@ -1,8 +1,8 @@
 import { Button, FlatList, Pressable, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useDatabase, Swimmer } from '@/database/useDatabase';
-import { useEffect, useState } from 'react';
-import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
 
 export default function SwimmersScreen() {
   const [swimmersList, setSwimmersList] = useState<Swimmer[]>([]);
@@ -25,6 +25,12 @@ export default function SwimmersScreen() {
   useEffect(() => {
     getSwimmers();
   }, [sortKey, sortOrder]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+        getSwimmers();
+    }, [])
+  );
 
   const sortData = (data: Swimmer[], key: 'name' | 'gender' | 'year_of_birth', order: 'asc' | 'desc') => {
     const sorted = [...data].sort((a, b) => {

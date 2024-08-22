@@ -1,6 +1,7 @@
 import { EventTime } from "@/database/useDatabase";
 
 export type TimeDatePair = {
+    id: number
     time: number
     date: string
 }
@@ -17,7 +18,7 @@ export default function convertEventTimes(events: EventTime[]): EventTimeItem[] 
     // Populate the map
     events.forEach((event) => {
       const key = `${event.distance} ${event.stroke} (${event.course})`;
-      const timePair: TimeDatePair = { time: event.time, date: event.date };
+      const timePair: TimeDatePair = { id: event.id ,time: event.time, date: event.date };
   
       if (!eventMap[key]) {
         eventMap[key] = [];

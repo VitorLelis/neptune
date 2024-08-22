@@ -26,6 +26,7 @@ export type EventTime = {
     distance: number
     stroke: string
     course: string
+    id: number //Times ID
     time: number
     date: string
 }
@@ -115,8 +116,19 @@ export function useDatabase(){
         }
     }
 
+    async function updateTime(data:Time) {
+        const query = `UPDATE times SET swimmer_id = ?, event_id = ?, time = ?, date = ?
+                        WHERE id = ?`
+        try {
+            await database.getAllAsync(query,[data.swimmer_id, 
+                data.event_id, data.time, data.date, data.id])
+        } catch (error) {
+            throw error
+        }
+    }
+
     async function getSwimmerEventTime(id: number) {
-        const query = `SELECT events.distance, events.stroke, events.course, times.time, times.date
+        const query = `SELECT events.distance, events.stroke, events.course, times.id, times.time, times.date
                         FROM times INNER JOIN events ON times.event_id = events.id
                         WHERE times.swimmer_id = ?`
         try {
@@ -128,5 +140,5 @@ export function useDatabase(){
     }
 
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
-        addEvent, getEvent, addTime, getSwimmerEventTime}
+        addEvent, getEvent, addTime, updateTime, getSwimmerEventTime}
 }

@@ -1,11 +1,11 @@
 import { View,Text } from "@/components/Themed";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome6';
 import { TouchableOpacity,StyleSheet, FlatList, Pressable } from "react-native";
 import { useDatabase } from "@/database/useDatabase";
 import { useActionSheet } from "@expo/react-native-action-sheet";
-import convertEventTimes, { EventTimeItem } from "@/utils/eventTimesUtils";
+import convertEventTimes, { EventTimeItem, TimeDatePair } from "@/utils/eventTimesUtils";
 import timeToString from "@/utils/timeToString";
 
 export default function SwimmerInfo(){
@@ -21,29 +21,34 @@ export default function SwimmerInfo(){
     const params = useLocalSearchParams<{id :string}>();
     const { showActionSheetWithOptions } = useActionSheet();
 
-    useEffect(() => {
-        if(params.id){
-            database.infoSwimmer(Number(params.id)).then(response => {
-                if (response) {
-                    setData({
-                        name: response.name,
-                        gender: response.gender,
-                        year_of_birth: response.year_of_birth
-                    })
-                }
-            })
-            database.getSwimmerEventTime(Number(params.id)).then(response =>{
-                if (response) {
-                    const eventItens = convertEventTimes(response)
-                    setEventList(eventItens)
-                }
-            })
-        }
-    }, [params.id])
+    const getSwimmerInfo = async () => {
+      if (params.id) {
+          const swimmerInfo = await database.infoSwimmer(Number(params.id));
+          const events = await database.getSwimmerEventTime(Number(params.id));
 
-    const handleEventPress = (key: string) => {
-        setExpandedKey(expandedKey === key ? null : key);
-      };
+          if (swimmerInfo) {
+              setData({
+                  name: swimmerInfo.name,
+                  gender: swimmerInfo.gender,
+                  year_of_birth: swimmerInfo.year_of_birth,
+              });
+          }
+          if (events) {
+              const eventItems = convertEventTimes(events);
+              setEventList(eventItems);
+          }
+      }
+  };
+
+  useEffect(() => {
+    getSwimmerInfo();
+  }, [params.id]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+        getSwimmerInfo();
+    }, [])
+);
 
     const handleActionPress = (index: number) => {
       switch (index) {
@@ -92,6 +97,19 @@ export default function SwimmerInfo(){
           }
       );
   };
+
+  const handleEditTime = (data: TimeDatePair, event: string) => {
+    router.navigate({
+      pathname: '/editTime',
+      params:{
+        id: data.id, //Time ID
+        swimmer_id: params.id,
+        time: timeToString(data.time),
+        date: data.date,
+        event: event
+      }
+    })
+  }
     
   return (
     <View style={{ flex: 1, padding: 20 }}>
@@ -112,21 +130,31 @@ export default function SwimmerInfo(){
         keyExtractor={item => item.key}
         renderItem={({ item }) => (
           <View>
-            <Pressable onPress={() => handleEventPress(item.key)}>
+            <Pressable onPress={() => setExpandedKey(expandedKey === item.key ? null : item.key)}>
               <View style={styles.header}>
                 <Text>{item.key}</Text>
               </View>
             </Pressable>
             {expandedKey === item.key && (
-              <FlatList
+              <View>
+                <FlatList
                 data={item.events}
                 keyExtractor={(event, index) => index.toString()}
                 renderItem={({ item, index }) => (
                   <View style={styles.nestedList}>
                     <Text>({index+1}) {timeToString(item.time)} - {item.date}</Text>
+
+                    <TouchableOpacity onPress={()=> handleEditTime(item,expandedKey)}>
+                      <FontAwesome name="edit" color="#4184F8" size={18} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => console.log('DELETE TIME')}>
+                      <FontAwesome name="trash-can" color="#f00" size={18} />
+                    </TouchableOpacity>
                   </View>
                 )}
               />
+              </View>
             )}
           </View>
         )}
@@ -174,5 +202,9 @@ const styles = StyleSheet.create({
   },
   nestedList: {
     paddingLeft: 20,
+    padding: 24,
+    borderRadius: 5,
+    gap: 18,
+    flexDirection: "row",
   },
 });
