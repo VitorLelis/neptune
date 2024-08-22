@@ -91,10 +91,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   item: {
-    backgroundColor: "#4184F8",
-    padding: 24,
-    borderRadius: 5,
-    gap: 18,
-    flexDirection: "row",
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#4184F8',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
 });
