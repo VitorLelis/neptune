@@ -139,6 +139,15 @@ export function useDatabase(){
         }
     }
 
+    async function removeTime(id:number) {
+        try {
+            await database.execAsync(`DELETE FROM times WHERE id = ${id}`)
+          } catch (error) {
+            throw error
+          }
+        }
+
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
-        addEvent, getEvent, addTime, updateTime, getSwimmerEventTime}
+        addEvent, getEvent, addTime, updateTime, getSwimmerEventTime,
+        removeTime}
 }

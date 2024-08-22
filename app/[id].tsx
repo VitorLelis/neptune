@@ -2,7 +2,7 @@ import { View,Text } from "@/components/Themed";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import FontAwesome from '@expo/vector-icons/FontAwesome6';
-import { TouchableOpacity,StyleSheet, FlatList, Pressable } from "react-native";
+import { TouchableOpacity,StyleSheet, FlatList, Pressable, Alert } from "react-native";
 import { useDatabase } from "@/database/useDatabase";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import convertEventTimes, { EventTimeItem, TimeDatePair } from "@/utils/eventTimesUtils";
@@ -110,6 +110,20 @@ export default function SwimmerInfo(){
       }
     })
   }
+
+  const handleDeleteTime = (time_id: number) => {
+    Alert.alert('Delete Time', 'This action cannot be undone!', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {
+        database.removeTime(time_id),
+        getSwimmerInfo()
+      }
+      },
+    ]);
+  }
     
   return (
     <View style={{ flex: 1, padding: 20 }}>
@@ -148,7 +162,7 @@ export default function SwimmerInfo(){
                       <FontAwesome name="edit" color="#4184F8" size={18} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => console.log('DELETE TIME')}>
+                    <TouchableOpacity onPress={() => handleDeleteTime(item.id)}>
                       <FontAwesome name="trash-can" color="#f00" size={18} />
                     </TouchableOpacity>
                   </View>
