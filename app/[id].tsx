@@ -21,7 +21,7 @@ export default function SwimmerInfo(){
     const params = useLocalSearchParams<{id :string}>();
     const { showActionSheetWithOptions } = useActionSheet();
 
-    const getSwimmerInfo = async () => {
+    async function getSwimmerInfo(){
       if (params.id) {
           const swimmerInfo = await database.infoSwimmer(Number(params.id));
           const events = await database.getSwimmerEventTime(Number(params.id));
@@ -38,7 +38,7 @@ export default function SwimmerInfo(){
               setEventList(eventItems);
           }
       }
-  };
+    }
 
   useEffect(() => {
     getSwimmerInfo();
@@ -49,6 +49,14 @@ export default function SwimmerInfo(){
         getSwimmerInfo();
     }, [])
 );
+
+async function deleteSwimmer(id: number) {
+  try {
+    await database.removeSwimmer(id)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
     const handleActionPress = (index: number) => {
       switch (index) {
@@ -78,7 +86,7 @@ export default function SwimmerInfo(){
                 style: 'cancel',
               },
               {text: 'OK', onPress: () => {
-                database.removeSwimmer(Number(params.id)),
+                deleteSwimmer(Number(params.id))
                 getSwimmerInfo(),
                 router.navigate('/')
               }
@@ -121,6 +129,14 @@ export default function SwimmerInfo(){
     })
   }
 
+  async function deleteTime(time_id:number) {
+    try {
+      await database.removeTime(time_id)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleDeleteTime = (time_id: number) => {
     Alert.alert('Delete Time', 'This action cannot be undone!', [
       {
@@ -128,7 +144,7 @@ export default function SwimmerInfo(){
         style: 'cancel',
       },
       {text: 'OK', onPress: () => {
-        database.removeTime(time_id),
+        deleteTime(time_id),
         getSwimmerInfo()
       }
       },
