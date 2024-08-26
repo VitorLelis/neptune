@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useDatabase } from '@/database/useDatabase';
 import { useLocalSearchParams } from 'expo-router';
 import stringToTime from '@/utils/stringToTime';
+import eventExist from '@/utils/eventExist';
 
 export default function EditTimeScreen() {
   const { id: defaultId, swimmer_id: defaultSwimmerId,time: defaultTime, date: defaultDate, event: defaultEvent } = useLocalSearchParams() as {
@@ -50,6 +51,10 @@ export default function EditTimeScreen() {
         if (!date.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)){
             return Alert.alert("Date", "Not a valid date!")
         }
+        if (!eventExist(Number(distance), stroke, course)){
+          return Alert.alert("Invalid event", "Please select a valid event")
+        }
+        
         const response = await database.getEvent({distance: Number(distance),stroke,course})
         
         if(!response){
@@ -79,14 +84,19 @@ export default function EditTimeScreen() {
   return (
     <View style={styles.container}>
 
-      <TextInput
-        style={styles.input}
-        value={distance}
-        onChangeText={setDistance}
-        placeholder="Distance"
-        placeholderTextColor="gray"  // To change placeholder text color
-        keyboardType="numeric"  // Ensure numeric keyboard for year input
-      />
+      <Text>Distance</Text>
+      <Picker
+        selectedValue={distance}
+        style={styles.picker}
+        onValueChange={(itemValue) => setDistance(itemValue)}
+      >
+        <Picker.Item label="50" value="50" />
+        <Picker.Item label="100" value="100" />
+        <Picker.Item label="200" value="200" />
+        <Picker.Item label="400" value="400" />
+        <Picker.Item label="800" value="800" />
+        <Picker.Item label="1500" value="1500" />
+      </Picker>
 
       <Text>Stroke</Text>
       <Picker
@@ -98,6 +108,7 @@ export default function EditTimeScreen() {
         <Picker.Item label="Backstroke" value="Backstroke" />
         <Picker.Item label="Breaststroke" value="Breaststroke" />
         <Picker.Item label="Butterfly" value="Butterfly" />
+        <Picker.Item label="Individual Medley" value="Individual Medley" />
       </Picker>
 
       <Text>Course</Text>
@@ -106,7 +117,6 @@ export default function EditTimeScreen() {
         style={styles.picker}
         onValueChange={(itemValue) => setCourse(itemValue)}
       >
-        <Picker.Item label="SCY" value="SCY" />
         <Picker.Item label="SCM" value="SCM" />
         <Picker.Item label="LCM" value="LCM" />
       </Picker>
