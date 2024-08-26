@@ -88,7 +88,7 @@ async function deleteSwimmer(id: number) {
               {text: 'OK', onPress: () => {
                 deleteSwimmer(Number(params.id))
                 getSwimmerInfo(),
-                router.navigate('/')
+                router.navigate('/(tabs)/swimmers')
               }
               },
             ]);

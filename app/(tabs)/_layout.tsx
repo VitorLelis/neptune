@@ -29,6 +29,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="house" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="swimmers"
+        options={{
           title: 'Swimmers',
           tabBarIcon: ({ color }) => <TabBarIcon name="person-swimming" color={color} />,
           headerRight: () => (
@@ -66,13 +73,6 @@ export default function TabLayout() {
         options={{
           title: 'Time Converter',
           tabBarIcon: ({ color }) => <TabBarIcon name="clock-rotate-left" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="help"
-        options={{
-          title: 'Help',
-          tabBarIcon: ({ color }) => <TabBarIcon name="circle-info" color={color} />,
         }}
       />
     </Tabs>
