@@ -68,7 +68,7 @@ export default function SwimmersScreen() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }: { item: Swimmer }) => (
           <Pressable onPress={() => router.navigate(`/${item.id}`)}>
-            <View style={styles.item}>
+            <View style={styles.item} lightColor="#f0f0f0" darkColor="#202020">
               <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
             </View>
           </Pressable>)}
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#4184F8',
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
