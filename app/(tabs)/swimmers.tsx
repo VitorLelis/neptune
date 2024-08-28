@@ -68,7 +68,7 @@ export default function SwimmersScreen() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }: { item: Swimmer }) => (
           <Pressable onPress={() => router.navigate(`/${item.id}`)}>
-            <View style={styles.item} lightColor="#f0f0f0" darkColor="#202020">
+            <View style={styles.item} lightColor="#fff" darkColor="#303030">
               <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
             </View>
           </Pressable>)}

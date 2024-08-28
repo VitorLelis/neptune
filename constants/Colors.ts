@@ -1,7 +1,7 @@
 export default {
   light: {
     text: '#000',
-    background: '#fff',
+    background: '#f0f0f0',
     tint: '#4184F8',
     tabIconDefault: '#ccc',
     tabIconSelected: '#4184F8',
