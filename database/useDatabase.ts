@@ -26,9 +26,17 @@ export type EventTime = {
     distance: number
     stroke: string
     course: string
-    id: number //Times ID
+    id: number // Times ID
     time: number
     date: string
+}
+
+export type SwimmerTime = {
+    id: number // Swimmer ID
+    name: string 
+    gender: string 
+    time: number 
+    date: string 
 }
 
 export function useDatabase(){
@@ -156,7 +164,32 @@ export function useDatabase(){
         }
     }
 
+    async function listEvents() {
+        const query =  `SELECT * FROM events
+                        ORDER BY stroke ASC, distance ASC, course ASC;
+                        `
+        try {
+            const response = await database.getAllAsync<Event>(query)
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async function getRank(event_id:number) {
+        const query = `SELECT swimmers.id, swimmers.name, swimmers.gender, times.time, times.date 
+                        FROM times JOIN swimmers ON times.swimmer_id = swimmers.id
+                        WHERE times.event_id = ?
+                        ORDER BY times.time ASC`
+        try {
+            const response = database.getAllAsync<SwimmerTime>(query,event_id)
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
-        addEvent, getEvent, addTime, updateTime, getSwimmerEventTime,
-        removeTime, removeSwimmer}
+            addEvent, getEvent, addTime, updateTime, getSwimmerEventTime,
+            removeTime, removeSwimmer, listEvents, getRank}
 }
