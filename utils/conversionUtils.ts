@@ -7,68 +7,46 @@ interface ConversionFactors {
     };
   }
   
-  export const conversionFactors: ConversionFactors = {
-    'SCY to SCM': {
-      '50 Freestyle': 1.08,
-      '50 Backstroke': 1.10,
-      '50 Breaststroke': 1.12,
-      '50 Butterfly': 1.09,
-      '100 Freestyle': 1.11,
-      '100 Backstroke': 1.12,
-      '100 Breaststroke': 1.15,
-      '100 Butterfly': 1.12,
-    },
-    'SCY to LCM': {
-      '50 Freestyle': 1.09,
-      '50 Backstroke': 1.12,
-      '50 Breaststroke': 1.13,
-      '50 Butterfly': 1.11,
-      '100 Freestyle': 1.10,
-      '100 Backstroke': 1.11,
-      '100 Breaststroke': 1.14,
-      '100 Butterfly': 1.11,
-    },
-    'SCM to LCM': {
-      '50 Freestyle': 1.01,
-      '50 Backstroke': 1.02,
-      '50 Breaststroke': 1.03,
-      '50 Butterfly': 1.02,
-      '100 Freestyle': 1.02,
-      '100 Backstroke': 1.03,
-      '100 Breaststroke': 1.03,
-      '100 Butterfly': 1.03,
-    },
-    'LCM to SCM': {
-      '50 Freestyle': 0.99,
-      '50 Backstroke': 0.98,
-      '50 Breaststroke': 0.97,
-      '50 Butterfly': 0.98,
-      '100 Freestyle': 0.98,
-      '100 Backstroke': 0.97,
-      '100 Breaststroke': 0.97,
-      '100 Butterfly': 0.97,
-    },
-    'LCM to SCY': {
-      '50 Freestyle': 0.91,
-      '50 Backstroke': 0.89,
-      '50 Breaststroke': 0.88,
-      '50 Butterfly': 0.90,
-      '100 Freestyle': 0.90,
-      '100 Backstroke': 0.90,
-      '100 Breaststroke': 0.87,
-      '100 Butterfly': 0.90,
-    },
-    'SCM to SCY': {
-      '50 Freestyle': 0.93,
-      '50 Backstroke': 0.91,
-      '50 Breaststroke': 0.89,
-      '50 Butterfly': 0.91,
-      '100 Freestyle': 0.89,
-      '100 Backstroke': 0.89,
-      '100 Breaststroke': 0.87,
-      '100 Butterfly': 0.89,
-    },
-  };
+export const conversionFactors: ConversionFactors = {
+  'LCM to SCM': {
+    '50 Freestyle': -0.75,
+    '50 Backstroke': -0.90,
+    '50 Breaststroke': -1.35,
+    '50 Butterfly': -0.85,
+    '100 Freestyle': -1.75,
+    '100 Backstroke': -1.90,
+    '100 Breaststroke': -2.75,
+    '100 Butterfly': -1.75,
+    '200 Freestyle': -3.75,
+    '200 Backstroke': -4.00,
+    '200 Breaststroke': -5.50,
+    '200 Butterfly': -4.00,
+    '200 IM': -4.00,
+    '400 Freestyle': -7.75,
+    '400 IM': -8.00,
+    '800 Freestyle': -16.00,
+    '1500 Freestyle': -30.00,
+  },
+  'SCM to LCM': {
+    '50 Freestyle': 0.75,
+    '50 Backstroke': 0.90,
+    '50 Breaststroke': 1.35,
+    '50 Butterfly': 0.85,
+    '100 Freestyle': 1.75,
+    '100 Backstroke': 1.90,
+    '100 Breaststroke': 2.75,
+    '100 Butterfly': 1.75,
+    '200 Freestyle': 3.75,
+    '200 Backstroke': 4.00,
+    '200 Breaststroke': 5.50,
+    '200 Butterfly': 4.00,
+    '200 IM': 4.00,
+    '400 Freestyle': 7.75,
+    '400 IM': 8.00,
+    '800 Freestyle': 16.00,
+    '1500 Freestyle': 30.00,
+  }
+};  
 
 export function convertTime(
     time: string,
@@ -85,5 +63,5 @@ export function convertTime(
       throw new Error('Conversion factor not found');
     }
   
-    return timeToString((stringToTime(time) * factor));
+    return timeToString((stringToTime(time) + factor));
   } 

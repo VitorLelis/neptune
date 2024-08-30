@@ -44,6 +44,10 @@ export default function ConverterScreen() {
       >
         <Picker.Item label="50" value="50" />
         <Picker.Item label="100" value="100" />
+        <Picker.Item label="200" value="200" />
+        <Picker.Item label="400" value="400" />
+        <Picker.Item label="800" value="800" />
+        <Picker.Item label="1500" value="1500" />
       </Picker>
 
       <Text style={styles.label}>Original Course</Text>
@@ -52,7 +56,6 @@ export default function ConverterScreen() {
         style={styles.picker}
         onValueChange={(itemValue) => setOriginalCourse(itemValue)}
       >
-        <Picker.Item label="SCY" value="SCY" />
         <Picker.Item label="SCM" value="SCM" />
         <Picker.Item label="LCM" value="LCM" />
       </Picker>
@@ -63,7 +66,6 @@ export default function ConverterScreen() {
         style={styles.picker}
         onValueChange={(itemValue) => setTargetCourse(itemValue)}
       >
-        <Picker.Item label="SCY" value="SCY" />
         <Picker.Item label="SCM" value="SCM" />
         <Picker.Item label="LCM" value="LCM" />
       </Picker>
@@ -77,7 +79,7 @@ export default function ConverterScreen() {
 
       <Button title="Convert" onPress={handleConvert} />
 
-      {result && <Text style={styles.result}>Converted Time: {result}</Text>}
+      {result && <Text style={styles.result}>{result}</Text>}
     </View>
   );
 }
