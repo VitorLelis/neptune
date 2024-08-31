@@ -39,6 +39,14 @@ export type SwimmerTime = {
     date: string 
 }
 
+export type SwimmerRelay = {
+    id: number // Swimmer ID
+    name: string
+    year_of_birth: number
+    stroke: string
+    time: number
+}
+
 export function useDatabase(){
     const database = useSQLiteContext()
     async function createSwimmer(data:Omit<Swimmer,"id">) {
@@ -189,7 +197,22 @@ export function useDatabase(){
         }
     }
 
+    async function getSwimmerRelay(swimmer_id: number, course: string, distance:number) {
+        const query = `SELECT swimmers.id, swimmers.name, swimmers.year_of_birth, events.stroke, MIN(times.time) AS time
+                       FROM times 
+                       JOIN swimmers ON times.swimmer_id = swimmers.id
+                       JOIN events ON times.event_id = events.id
+                       WHERE swimmers.id = ? AND events.course = ? AND events.distance = ?
+                       GROUP BY events.stroke`
+        try {
+            const response = database.getAllAsync<SwimmerRelay>(query,[swimmer_id,course,distance])
+            return response
+        } catch (error) {
+            throw error
+        }
+    }
+
     return {createSwimmer, listSwimmers, infoSwimmer, updateSwimmer, 
             addEvent, getEvent, addTime, updateTime, getSwimmerEventTime,
-            removeTime, removeSwimmer, listEvents, getRank}
+            removeTime, removeSwimmer, listEvents, getRank,getSwimmerRelay}
 }
