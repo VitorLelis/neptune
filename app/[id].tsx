@@ -7,6 +7,8 @@ import { useDatabase } from "@/database/useDatabase";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import convertEventTimes, { EventTimeItem, TimeDatePair } from "@/utils/eventTimesUtils";
 import timeToString from "@/utils/timeToString";
+import { ScrollView } from "react-native-reanimated/lib/typescript/Animated";
+import { Picker } from "@react-native-picker/picker";
 
 export default function SwimmerInfo(){
     const [data, setData] = useState({
@@ -165,40 +167,35 @@ async function deleteSwimmer(id: number) {
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>EVENTS</Text>
-        <FlatList
-        data={eventList}
-        keyExtractor={item => item.key}
-        renderItem={({ item }) => (
-          <View>
-            <Pressable onPress={() => setExpandedKey(expandedKey === item.key ? null : item.key)}>
-              <View style={styles.header}>
-                <Text>{item.key}</Text>
-              </View>
-            </Pressable>
-            {expandedKey === item.key && (
-              <View>
-                <FlatList
-                data={item.events}
-                keyExtractor={(event, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View style={styles.nestedList}>
-                    <Text>({index+1}) {timeToString(item.time)} - {item.date}</Text>
+          <Picker
+              selectedValue={expandedKey}
+              onValueChange={(itemValue) => setExpandedKey(itemValue)}
+              style={{ height: 50, width: '100%' }}
+          >
+          
+          {eventList.map((item) => (
+            <Picker.Item label={item.key} value={item.key} key={item.key} />
+          ))}
+          </Picker>
 
-                    <TouchableOpacity onPress={()=> handleEditTime(item,expandedKey)}>
+          {expandedKey && (
+            <FlatList
+              data={eventList.find(item => item.key === expandedKey)?.events || []}
+              keyExtractor={(event, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <View style={styles.nestedList}>
+                  <Text>({index + 1}) {timeToString(item.time)} - {item.date}</Text>
+                    <TouchableOpacity onPress={() => handleEditTime(item, expandedKey)}>
                       <FontAwesome name="edit" color="#4184F8" size={18} />
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => handleDeleteTime(item.id)}>
                       <FontAwesome name="trash-can" color="#f00" size={18} />
                     </TouchableOpacity>
-                  </View>
+                </View>
                 )}
-              />
-              </View>
-            )}
-          </View>
-        )}
-        />
+            />
+          )}
       </View>
     </View>
   );
