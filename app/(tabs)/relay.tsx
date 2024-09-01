@@ -5,6 +5,8 @@ import { Swimmer, useDatabase } from '@/database/useDatabase';
 import makeRelay, { Relay } from '@/utils/relayUtils';
 import { Picker } from '@react-native-picker/picker';
 import timeToString from '@/utils/timeToString';
+import { useFocusEffect } from 'expo-router';
+import React from 'react';
 
 const relayOptionMap: {[key:string]: {course:string, distance:number}} = {
   "4x50m Medley Relay (SCM)" : {course:"SCM", distance: 50},
@@ -34,6 +36,12 @@ export default function RelayScreen() {
   useEffect(() => {
     getSwimmers();
   }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+        getSwimmers();
+    }, [])
+  )
 
   const handleSwimmerSelection = (swimmerId: number) => {
     setSelectedSwimmers(prevSelected => {

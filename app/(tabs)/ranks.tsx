@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { useDatabase, Event, SwimmerTime } from '@/database/useDatabase';
 import { Picker } from '@react-native-picker/picker';
 import sortRank from '@/utils/sortRank';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import timeToString from '@/utils/timeToString';
+import React from 'react';
 
 export default function RanksScreen() {
   const [eventList, setEventList] = useState<Event[]>([])
@@ -41,6 +42,12 @@ export default function RanksScreen() {
       getRankList();
     }
   }, [eventId, isIndividual, genderSort]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+        getEventList();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
