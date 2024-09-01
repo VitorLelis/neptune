@@ -59,7 +59,7 @@ export function useDatabase(){
     }
 
     async function listSwimmers() {
-        const query =  "SELECT * FROM swimmers;"
+        const query =  "SELECT * FROM swimmers ORDER BY name ASC;"
         try {
             const response = await database.getAllAsync<Swimmer>(query)
             return response

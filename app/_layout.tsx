@@ -62,6 +62,7 @@ function RootLayoutNav() {
             <Stack.Screen name="editSwimmer" options={{ title: "Edit Swimmer Info"}} />
             <Stack.Screen name="addTime" options={{ title: "Add New Time"}} />
             <Stack.Screen name="editTime" options={{ title: "Edit Time"}} />
+            <Stack.Screen name="helpRelay" options={{ title: "Help Relay"}} />
           </Stack>
         </ThemeProvider>
       </ActionSheetProvider>

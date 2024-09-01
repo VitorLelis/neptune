@@ -133,7 +133,8 @@ export default function RelayScreen() {
                 <Text>Butterfly: {bestRelay.butterfly.name} - {timeToString(bestRelay.butterfly.time)}</Text>
                 <Text>Freestyle: {bestRelay.freestyle.name} - {timeToString(bestRelay.freestyle.time)}</Text>
                 <Text>Total Time: {timeToString(bestRelay.totalTime)}</Text>
-                <Text>Age Group: {bestRelay.ageGroup}</Text>
+                <Text>Age Group: {bestRelay.ageGroup}*</Text>
+                <Text>*For Masters</Text>
               </>
             )}
 
