@@ -1,6 +1,6 @@
 import { SwimmerTime } from "@/database/useDatabase";
 
-export default function sortRank(data:SwimmerTime[], isIndividual: boolean, genderSort: string) {
+export default function sortRank(data:SwimmerTime[], isIndividual: boolean, genderSort: string) : SwimmerTime[] {
     let genderData: SwimmerTime[] = []
     if (genderSort !== "None"){
         genderData = data.filter(swimmer => swimmer.gender === genderSort)

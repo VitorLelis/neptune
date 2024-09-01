@@ -55,10 +55,6 @@ export default function RelayScreen() {
   }
 
   const calculateRelay = async () => {
-    if(selectedSwimmers.length !== 4){
-      return Alert.alert('Please select exactly 4 swimmers.')
-    } 
-
     const course = relayOptionMap[selectedRelay].course
     const distance = relayOptionMap[selectedRelay].distance 
 
@@ -133,8 +129,7 @@ export default function RelayScreen() {
                 <Text>Butterfly: {bestRelay.butterfly.name} - {timeToString(bestRelay.butterfly.time)}</Text>
                 <Text>Freestyle: {bestRelay.freestyle.name} - {timeToString(bestRelay.freestyle.time)}</Text>
                 <Text>Total Time: {timeToString(bestRelay.totalTime)}</Text>
-                <Text>Age Group: {bestRelay.ageGroup}*</Text>
-                <Text>*For Masters</Text>
+                <Text>Age Group for Masters: {bestRelay.ageGroup}</Text>
               </>
             )}
 

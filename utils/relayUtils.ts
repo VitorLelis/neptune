@@ -28,7 +28,7 @@ function calculateTime(relay: SwimmerRelay[]): number{
     }, 0)
 }
 
-function calculateAgeGroup(relay: SwimmerRelay[], currentYear: number) {
+function calculateAgeGroup(relay: SwimmerRelay[], currentYear: number): number | null {
     const ageGroups: { [key: number]: {min:number,max:number} } = {
         0: { min: 0, max: 99 },
         1: { min: 100, max: 119 },

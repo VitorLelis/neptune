@@ -116,7 +116,6 @@ export default function AddSwimmersScreen() {
         placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
       />
 
-      <Text>Date</Text>
       <Button title="Select Date" onPress={showDatePickerHandler} />
       <Text>Selected Date: {formattedDate}</Text>
 
