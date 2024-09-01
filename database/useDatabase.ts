@@ -146,7 +146,9 @@ export function useDatabase(){
     async function getSwimmerEventTime(id: number) {
         const query = `SELECT events.distance, events.stroke, events.course, times.id, times.time, times.date
                         FROM times INNER JOIN events ON times.event_id = events.id
-                        WHERE times.swimmer_id = ?`
+                        WHERE times.swimmer_id = ?
+                        ORDER BY events.stroke ASC, events.distance ASC, course ASC;
+                        `
         try {
             const response = database.getAllAsync<EventTime>(query,id)
             return response
