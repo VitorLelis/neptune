@@ -35,22 +35,19 @@ export default function AddSwimmersScreen() {
 
         const response = await database.getEvent({distance: Number(distance),stroke,course})
         
-        if(!response){
-            const eventId = await database.addEvent({distance: Number(distance),stroke,course})
-            await database.addTime({
-              swimmer_id: Number(params.id),
-              event_id: Number(eventId.insertedRowId), 
-              time: stringToTime(time),
-              date: formattedDate
-            })
-        } else{
-            await database.addTime({
-              swimmer_id: Number(params.id),
-              event_id: Number(response), 
-              time: stringToTime(time),
-              date: formattedDate
-            })
-        }
+        const eventId = response || (await database.addEvent({
+          distance: Number(distance),
+          stroke,
+          course,
+        })).insertedRowId;
+        
+        await database.addTime({
+          swimmer_id: Number(params.id),
+          event_id: Number(eventId),
+          time: stringToTime(time),
+          date: formattedDate,
+        });
+        
 
         Alert.alert("Time added!")
     } catch (error) {
@@ -66,8 +63,9 @@ export default function AddSwimmersScreen() {
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(Platform.OS === 'ios');
     if (selectedDate) {
-        setDate(selectedDate);
-        setFormattedDate(date.toISOString().split('T')[0])
+        setDate(selectedDate)
+        const newFormatted = selectedDate.toISOString().split('T')[0] 
+        setFormattedDate(newFormatted)
     }
   }
 

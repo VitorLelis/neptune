@@ -56,25 +56,21 @@ export default function EditTimeScreen() {
         }
         
         const response = await database.getEvent({distance: Number(distance),stroke,course})
+
+        const eventId = response || (await database.addEvent({
+          distance: Number(distance),
+          stroke,
+          course,
+        })).insertedRowId;
         
-        if(!response){
-            const eventId = await database.addEvent({distance: Number(distance),stroke,course})
-            await database.updateTime({
-              id: Number(defaultId),
-              swimmer_id: Number(defaultSwimmerId),
-              event_id: Number(eventId.insertedRowId), 
-              time: stringToTime(time),
-              date: formattedDate
-            })
-        } else{
-            await database.updateTime({
-              id: Number(defaultId),
-              swimmer_id: Number(defaultSwimmerId),
-              event_id: Number(response), 
-              time: stringToTime(time),
-              date: formattedDate
-            })
-        }
+        await database.updateTime({
+          id: Number(defaultId),
+          swimmer_id: Number(defaultSwimmerId),
+          event_id: Number(eventId), 
+          time: stringToTime(time),
+          date: formattedDate
+        });
+        
 
         Alert.alert("Time updated!")
     } catch (error) {
