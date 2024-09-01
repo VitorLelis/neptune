@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, TextInput, Button, Alert, Platform } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
@@ -6,6 +6,7 @@ import { useDatabase } from '@/database/useDatabase';
 import { useLocalSearchParams } from 'expo-router';
 import stringToTime from '@/utils/stringToTime';
 import eventExist from '@/utils/eventExist';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function EditTimeScreen() {
   const { id: defaultId, swimmer_id: defaultSwimmerId,time: defaultTime, date: defaultDate, event: defaultEvent } = useLocalSearchParams() as {
@@ -17,22 +18,24 @@ export default function EditTimeScreen() {
   };
 
   const [time, setTime] = useState('')
-  const [date, setDate] = useState('')
-  const [stroke, setStroke] = useState('Freestyle')
-  const [distance, setDistance] = useState('50')
-  const [course, setCourse] = useState('SCM')
+  const [stroke, setStroke] = useState('')
+  const [distance, setDistance] = useState('')
+  const [course, setCourse] = useState('')
+  const [date, setDate] = useState<Date>(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [formattedDate, setFormattedDate] = useState('')
 
   const database = useDatabase();
 
   // Set the initial state with the search parameters
   useEffect(() => {
     setTime(defaultTime || '');
-    setDate(defaultDate || '');
+    setFormattedDate(defaultDate || '');
     parseEvent(defaultEvent || '50 Freestyle (SCM)');
   }, [defaultTime, defaultDate, defaultEvent]);
 
   const parseEvent = (event: string) => {
-    const match = event.match(/^(\d+) (\w+) \((\w{3})\)$/)
+    const match = event.match(/^(\d+)m (\w+) \((\w{3})\)$/)
     if(match) {
       setDistance(match[1] || '50')
       setStroke(match[2] || 'Freestyle')
@@ -48,9 +51,6 @@ export default function EditTimeScreen() {
         if (!time.match(/^([0-5]?\d\:)?([0-5]\d\.\d{2})$/)){
             return Alert.alert("Time", "Not a valid time!")
         }
-        if (!date.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)){
-            return Alert.alert("Date", "Not a valid date!")
-        }
         if (!eventExist(Number(distance), stroke, course)){
           return Alert.alert("Invalid event", "Please select a valid event")
         }
@@ -64,14 +64,16 @@ export default function EditTimeScreen() {
               swimmer_id: Number(defaultSwimmerId),
               event_id: Number(eventId.insertedRowId), 
               time: stringToTime(time),
-              date})
+              date: formattedDate
+            })
         } else{
             await database.updateTime({
               id: Number(defaultId),
               swimmer_id: Number(defaultSwimmerId),
               event_id: Number(response), 
               time: stringToTime(time),
-              date})
+              date: formattedDate
+            })
         }
 
         Alert.alert("Time updated!")
@@ -79,6 +81,18 @@ export default function EditTimeScreen() {
         console.log(error)
     }
     
+  }
+
+  const showDatePickerHandler = () => {
+    setShowDatePicker(true);
+  }
+
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+        setDate(selectedDate);
+        setFormattedDate(date.toISOString().split('T')[0])
+    }
   }
 
   return (
@@ -128,12 +142,18 @@ export default function EditTimeScreen() {
         placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
       />
 
-      <TextInput
-        style={styles.input}
-        value={date}
-        onChangeText={setDate}
-        placeholder="Enter date (YYYY-MM-DD)"
-      />
+      <Text>Date</Text>
+      <Button title="Select Date" onPress={showDatePickerHandler} />
+      <Text>Selected Date: {formattedDate}</Text>
+
+      {showDatePicker && (
+        <RNDateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
 
     <Button title="Save" onPress={handleUpdateTime} />
 

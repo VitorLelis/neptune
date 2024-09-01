@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, TextInput, Button, Alert, Platform } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
@@ -7,13 +7,16 @@ import { useLocalSearchParams } from 'expo-router';
 
 import stringToTime from '@/utils/stringToTime';
 import eventExist from '@/utils/eventExist';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function AddSwimmersScreen() {
     const [stroke, setStroke] = useState('Freestyle');
     const [distance, setDistance] = useState('50');
     const [course, setCourse] = useState('SCM');
     const [time, setTime] = useState('');
-    const [date, setDate] = useState('')
+    const [date, setDate] = useState<Date>(new Date())
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [formattedDate, setFormattedDate] = useState('')
 
   const database = useDatabase()
   const params = useLocalSearchParams<{id :string}>();
@@ -25,9 +28,6 @@ export default function AddSwimmersScreen() {
         }
         if (!time.match(/^([0-5]?\d\:)?([0-5]\d\.\d{2})$/)){
             return Alert.alert("Time", "Not a valid time!")
-        }
-        if (!date.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)){
-            return Alert.alert("Date", "Not a valid date!")
         }
         if (!eventExist(Number(distance), stroke, course)){
           return Alert.alert("Invalid event", "Please select a valid event")
@@ -41,13 +41,15 @@ export default function AddSwimmersScreen() {
               swimmer_id: Number(params.id),
               event_id: Number(eventId.insertedRowId), 
               time: stringToTime(time),
-              date})
+              date: formattedDate
+            })
         } else{
             await database.addTime({
               swimmer_id: Number(params.id),
               event_id: Number(response), 
               time: stringToTime(time),
-              date})
+              date: formattedDate
+            })
         }
 
         Alert.alert("Time added!")
@@ -55,6 +57,18 @@ export default function AddSwimmersScreen() {
         console.log(error)
     }
     
+  }
+
+  const showDatePickerHandler = () => {
+    setShowDatePicker(true);
+  }
+
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+        setDate(selectedDate);
+        setFormattedDate(date.toISOString().split('T')[0])
+    }
   }
 
   return (
@@ -104,12 +118,18 @@ export default function AddSwimmersScreen() {
         placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
       />
 
-      <TextInput
-        style={styles.input}
-        value={date}
-        onChangeText={setDate}
-        placeholder="Enter date (YYYY-MM-DD)"
-      />
+      <Text>Date</Text>
+      <Button title="Select Date" onPress={showDatePickerHandler} />
+      <Text>Selected Date: {formattedDate}</Text>
+
+      {showDatePicker && (
+        <RNDateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+        />
+      )}
 
     <Button title="Save" onPress={handleAddTime} />
 
