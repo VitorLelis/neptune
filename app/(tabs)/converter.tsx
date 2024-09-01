@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, Button} from 'react-native';
+import { StyleSheet, TextInput, Button, Modal} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text, View } from '@/components/Themed';
 import { convertTime } from '@/utils/conversionUtils';
@@ -11,6 +11,7 @@ export default function ConverterScreen() {
   const [targetCourse, setTargetCourse] = useState('LCM');
   const [time, setTime] = useState('');
   const [result, setResult] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleConvert = () => {
     try {
@@ -19,7 +20,13 @@ export default function ConverterScreen() {
     } catch (error) {
       setResult('Error: ' + (error as Error).message);
     }
+    setModalVisible(true)
   };
+
+  const closeModal = () => {
+    setModalVisible(false)
+    setResult(null)
+  }
 
   return (
     <View style={styles.container}>
@@ -79,7 +86,20 @@ export default function ConverterScreen() {
 
       <Button title="Convert" onPress={handleConvert} />
 
-      {result && <Text style={styles.result}>{result}</Text>}
+      <Modal
+        visible={modalVisible}
+        animationType="none"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.title}>Result</Text>
+            <Text style={styles.result}>{result}</Text>
+            <Button title="Close" onPress={closeModal} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -94,7 +114,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
   },
   label: {
     fontSize: 16,
@@ -117,5 +136,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom:20
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
   },
 });
