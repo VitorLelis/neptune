@@ -1,3 +1,44 @@
+/**
+ * Generates the best relay team from a group of swimmers, calculates their total time, and determines their age group.
+ * 
+ * @function makeRelay
+ * 
+ * @param {SwimmerRelay[]} swimmers - An array of `SwimmerRelay` objects, where each object contains:
+ *    - `id` (number): The unique identifier of the swimmer.
+ *    - `name` (string): The name of the swimmer.
+ *    - `year_of_birth` (number): The year of birth of the swimmer.
+ *    - `stroke` (string): The stroke that the swimmer specializes in ('Backstroke', 'Breaststroke', 'Butterfly', 'Freestyle').
+ *    - `time` (number): The time the swimmer achieved for their stroke in seconds.
+ * 
+ * @returns {Relay | null} - The best relay team if possible, or `null` if no valid team can be formed. The `Relay` object contains:
+ *    - `backstroke` (object): Contains the name and time of the selected backstroke swimmer.
+ *    - `breaststroke` (object): Contains the name and time of the selected breaststroke swimmer.
+ *    - `butterfly` (object): Contains the name and time of the selected butterfly swimmer.
+ *    - `freestyle` (object): Contains the name and time of the selected freestyle swimmer.
+ *    - `totalTime` (number): The total time of the relay team in seconds.
+ *    - `ageGroup` (number): The age group of the relay team, calculated based on the swimmers' ages.
+ * 
+ * @example
+ * const swimmers: SwimmerRelay[] = [
+ *   { id: 1, name: 'Alice', stroke: 'Backstroke', time: 60, year_of_birth: 1985 },
+ *   { id: 2, name: 'Bob', stroke: 'Breaststroke', time: 70, year_of_birth: 1988 },
+ *   { id: 3, name: 'Charlie', stroke: 'Butterfly', time: 65, year_of_birth: 1990 },
+ *   { id: 4, name: 'Diana', stroke: 'Freestyle', time: 58, year_of_birth: 1987 },
+ * ];
+ * 
+ * const bestRelay = makeRelay(swimmers);
+ * console.log(bestRelay);
+ * // Output: {
+ * //   backstroke: { name: 'Alice', time: 60 },
+ * //   breaststroke: { name: 'Bob', time: 70 },
+ * //   butterfly: { name: 'Charlie', time: 65 },
+ * //   freestyle: { name: 'Diana', time: 58 },
+ * //   totalTime: 253,
+ * //   ageGroup: 2
+ * // }
+ */
+
+
 import { SwimmerRelay } from "@/database/useDatabase";
 
 export type Relay ={
