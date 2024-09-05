@@ -23,36 +23,21 @@ function getRelayCombinations(swimmers: SwimmerRelay[]): SwimmerRelay[][] {
 }
 
 function calculateTime(relay: SwimmerRelay[]): number{
-    return relay.reduce((acc,current) => {
-        return acc + current.time
-    }, 0)
+    return relay.reduce((acc,current) => {return acc + current.time}, 0)
 }
 
-function calculateAgeGroup(relay: SwimmerRelay[], currentYear: number): number | null {
-    const ageGroups: { [key: number]: {min:number,max:number} } = {
-        0: { min: 0, max: 99 },
-        1: { min: 100, max: 119 },
-        2: { min: 120, max: 159 },
-        3: { min: 160, max: 199 },
-        4: { min: 200, max: 239 },
-        5: { min: 240, max: 279 },
-        6: { min: 280, max: 319 },
-        7: { min: 320, max: 359 },
-    }
-
+function calculateAgeGroup(relay: SwimmerRelay[], currentYear: number): number {
     const totalAge = relay.reduce((sum, swimmer) => {
-        const age = currentYear - swimmer.year_of_birth;
-        return sum + age;
+        return sum + (currentYear - swimmer.year_of_birth)
     }, 0)
 
-    for (const key in ageGroups) {
-        const group = ageGroups[Number(key)];
-        if (totalAge >= group.min && totalAge <= group.max) {
-            return Number(key)
-        }
+    if (totalAge < 100){
+        return 0
     }
 
-    return null;
+    else{
+        return Math.ceil((totalAge-79) / 40)
+    }
 }
 
 function getBestRelay(relayOptions:SwimmerRelay[]): SwimmerRelay[] {
@@ -74,17 +59,12 @@ function getBestRelay(relayOptions:SwimmerRelay[]): SwimmerRelay[] {
 export default function makeRelay(swimmers:SwimmerRelay[]) : Relay|null {
     const bestRelay = getBestRelay(swimmers)
 
-
     if (bestRelay === undefined || bestRelay.length == 0) {
         return null;
     }
 
     const currentYear = new Date().getFullYear()
     const ageGroup = calculateAgeGroup(bestRelay, currentYear)
-
-    if (ageGroup === null) {
-        return null
-    }
 
     const relay: Relay = {
         backstroke: {
