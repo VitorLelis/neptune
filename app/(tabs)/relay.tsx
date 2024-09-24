@@ -1,4 +1,4 @@
-import { Alert, Button, FlatList, Modal, Pressable, StyleSheet } from 'react-native';
+import { Alert, Button, Modal, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useEffect, useState } from 'react';
 import { Swimmer, useDatabase } from '@/database/useDatabase';
@@ -8,21 +8,21 @@ import timeToString from '@/utils/timeToString';
 import { useFocusEffect } from 'expo-router';
 import React from 'react';
 
-const relayOptionMap: {[key:string]: {course:string, distance:number}} = {
-  "4x50m Medley Relay (SCM)" : {course:"SCM", distance: 50},
-  "4x50m Medley Relay (LCM)" : {course:"LCM", distance: 50},
-  "4x100m Medley Relay (SCM)" : {course:"SCM", distance: 100},
-  "4x100m Medley Relay (LCM)" : {course:"LCM", distance: 100}, 
-}
+const relayOptionMap: { [key: string]: { course: string, distance: number } } = {
+  "4x50m Medley Relay (SCM)": { course: "SCM", distance: 50 },
+  "4x50m Medley Relay (LCM)": { course: "LCM", distance: 50 },
+  "4x100m Medley Relay (SCM)": { course: "SCM", distance: 100 },
+  "4x100m Medley Relay (LCM)": { course: "LCM", distance: 100 },
+};
 
 export default function RelayScreen() {
-  const [swimmersList, setSwimmersList] = useState<Swimmer[]> ([])
-  const [selectedSwimmers, setSelectedSwimmers] = useState<number[]>([])
-  const [bestRelay, setBestRelay] = useState<Relay | null>(null)
+  const [swimmersList, setSwimmersList] = useState<Swimmer[]>([]);
+  const [selectedSwimmers, setSelectedSwimmers] = useState<number[]>([0, 0, 0, 0]);
+  const [bestRelay, setBestRelay] = useState<Relay | null>(null);
   const [selectedRelay, setSelectedRelay] = useState<string>("4x50m Medley Relay (SCM)");
   const [modalVisible, setModalVisible] = useState(false);
 
-  const database = useDatabase()
+  const database = useDatabase();
 
   async function getSwimmers() {
     try {
@@ -35,41 +35,44 @@ export default function RelayScreen() {
 
   useEffect(() => {
     getSwimmers();
-  }, [])
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
-        getSwimmers();
+      getSwimmers();
     }, [])
-  )
+  );
 
-  const handleSwimmerSelection = (swimmerId: number) => {
-    setSelectedSwimmers(prevSelected => {
-      if (prevSelected.includes(swimmerId)) {
-        return prevSelected.filter(id => id !== swimmerId); // Deselect swimmer
-      } else if (prevSelected.length < 4) {
-        return [...prevSelected, swimmerId]; // Select swimmer
-      }
-      return prevSelected;
-    })
-  }
+  // Update swimmer selection by index
+  const handleSwimmerChange = (index: number, swimmerId: number) => {
+    setSelectedSwimmers((prevSelected) => {
+      const updatedSwimmers = [...prevSelected];
+      updatedSwimmers[index] = swimmerId;
+      return updatedSwimmers;
+    });
+  };
 
   const calculateRelay = async () => {
-    const course = relayOptionMap[selectedRelay].course
-    const distance = relayOptionMap[selectedRelay].distance 
+    const swimmerSet = new Set(selectedSwimmers);
+    if (swimmerSet.size < selectedSwimmers.length) {
+      Alert.alert("Error", "You cannot select the same swimmer more than once.");
+      return;
+    }
+    const course = relayOptionMap[selectedRelay].course;
+    const distance = relayOptionMap[selectedRelay].distance;
 
     try {
       const swimmerRelays = await Promise.all(
-        selectedSwimmers.map(id => database.getSwimmerRelay(id, course, distance))
-      )
-      const allSwimmerRelays = swimmerRelays.flat()
-      const relay = makeRelay(allSwimmerRelays)
-      setBestRelay(relay)
-      setModalVisible(true)
+        selectedSwimmers.map((id) => database.getSwimmerRelay(id, course, distance))
+      );
+      const allSwimmerRelays = swimmerRelays.flat();
+      const relay = makeRelay(allSwimmerRelays);
+      setBestRelay(relay);
+      setModalVisible(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const closeModal = () => {
     setModalVisible(false);
@@ -81,39 +84,38 @@ export default function RelayScreen() {
       <Picker
         style={styles.picker}
         selectedValue={selectedRelay}
-        placeholder='Select Relay'
         onValueChange={(itemValue) => setSelectedRelay(itemValue)}
       >
         {Object.keys(relayOptionMap).map((opt, index) => (
-                    <Picker.Item key={index} label={opt} value={opt} />
-                ))}
+          <Picker.Item key={index} label={opt} value={opt} />
+        ))}
       </Picker>
 
-      <Text style={styles.title}>Select 4 Swimmers</Text>
-      <FlatList
-        data={swimmersList}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => handleSwimmerSelection(item.id)}>
-            <View
-              style={[
-                styles.swimmerItem,
-                selectedSwimmers.includes(item.id) && styles.selectedSwimmer,
-              ]}
-            >
-              <Text>{item.name} ({item.gender}, born {item.year_of_birth})</Text>
-            </View>
-          </Pressable>
-        )}
-      />
+      <Text style={styles.title}>Select 4 Swimmers for Relay</Text>
+
+      {[1,2,3,4].map((id, index) => (
+        <View key={index} style={styles.pickerContainer}>
+          <Text style={styles.label}>Swimmer #{id}</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={selectedSwimmers[index]}
+            onValueChange={(itemValue) => handleSwimmerChange(index, itemValue)}
+          >
+            <Picker.Item label="Select Swimmer" value={0} />
+            {swimmersList.map((swimmer) => (
+              <Picker.Item key={swimmer.id} label={`${swimmer.name} (${swimmer.gender}, born ${swimmer.year_of_birth})`} value={swimmer.id} />
+            ))}
+          </Picker>
+        </View>
+      ))}
 
       <Button
         title="Calculate Relay"
         onPress={calculateRelay}
-        disabled={selectedSwimmers.length !== 4}
+        disabled={selectedSwimmers.includes(0)}
       />
 
-    <Modal
+      <Modal
         visible={modalVisible}
         animationType="none"
         transparent={true}
@@ -142,7 +144,6 @@ export default function RelayScreen() {
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
@@ -163,22 +164,19 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
   },
-  swimmerItem: {
-    padding: 10,
-    marginVertical: 5,
+  pickerContainer: {
     width: '100%',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
+    marginBottom: 20,
   },
-  selectedSwimmer: {
-    backgroundColor: '#d1e7dd',
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: '80%',
