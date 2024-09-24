@@ -53,7 +53,7 @@ export default function TabLayout() {
           title: 'Relay Setup',
           tabBarIcon: ({ color }) => <TabBarIcon name="stopwatch" color={color} />,
           headerRight: () => (
-            <Link href="/helpRelay" asChild>
+            <Link href="/ageRelay" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome

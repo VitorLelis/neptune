@@ -1,7 +1,7 @@
 import { StyleSheet, FlatList } from 'react-native';
 import { Text, View } from '@/components/Themed';
 
-export default function HelpScreen() {
+export default function AgeGroupScreen() {
   const ageGroups = [
     { group: 'Group 0', range: 'Below 100' },
     { group: 'Group 1', range: '100 – 119' },
@@ -11,12 +11,10 @@ export default function HelpScreen() {
     { group: 'Group 5', range: '240 – 279' },
     { group: 'Group 6', range: '280 – 319' },
     { group: 'Group 7', range: '320 – 359' },
-    // Add more groups as needed, incrementing by 40 for each range
-  ];
+  ]
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Age Groups for Relay</Text>
       <FlatList
         data={ageGroups}
         keyExtractor={(item) => item.group}
@@ -28,6 +26,7 @@ export default function HelpScreen() {
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
+      <Text>Increment by 40 for each new Group</Text>
     </View>
   );
 }
