@@ -181,10 +181,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
   inputContainer: {
     marginTop: 20,
     width: '100%',

@@ -20,7 +20,7 @@ export default function AddSwimmersScreen() {
         await database.createSwimmer({name,gender,year_of_birth : Number(year_of_birth)})
         Alert.alert("Swimmer created!")
     } catch (error) {
-        console.log(error)
+        Alert.alert("Error", String(error));
     }
     
   }

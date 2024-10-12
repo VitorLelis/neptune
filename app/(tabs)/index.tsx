@@ -1,4 +1,4 @@
-import { FlatList, Pressable, StyleSheet, TextInput } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, TextInput } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useDatabase, Swimmer } from '@/database/useDatabase';
 import React, { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ export default function SwimmersScreen() {
       setSwimmersList(response)
       setFilteredData(response) // Initially, show all swimmers
     } catch (error) {
-      console.log(error)
+      Alert.alert("Error", String(error));
     }
   }
 
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: defaultBlue,
   },
-
   infoRow: {
     flexDirection: 'row',  // Align elements horizontally
     alignItems: 'center',  // Vertically center items

@@ -61,7 +61,7 @@ export default function SwimmerInfo(){
         try {
             await database.removeSwimmer(id)
         } catch (error) {
-            console.log(error)
+            Alert.alert("Error", String(error));
         }
     }
 
@@ -137,7 +137,7 @@ export default function SwimmerInfo(){
         try {
             await database.removeTime(time_id)
         } catch (error) {
-            console.log(error)
+            Alert.alert("Error", String(error));
         }
     }
 
@@ -217,62 +217,62 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 20,
   },
-    cardTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        color: defaultBlue
-    },
-    fab: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        borderRadius: 30,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10
-    },
-    nestedList: {
-        paddingLeft: 20,
-        padding: 24,
-        borderRadius: 5,
-        gap: 18,
-        flexDirection: "row",
-    },
-    resultText: {
-      fontSize: 16,
-      marginBottom: 8,
-      textAlign: 'left',
-    },
-    resultLabel: {
-      fontWeight: 'bold',
-    },
+cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: defaultBlue
+},
+fab: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    borderRadius: 30,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10
+},
+nestedList: {
+    paddingLeft: 20,
+    padding: 24,
+    borderRadius: 5,
+    gap: 18,
+    flexDirection: "row",
+},
+resultText: {
+  fontSize: 16,
+  marginBottom: 8,
+  textAlign: 'left',
+},
+resultLabel: {
+  fontWeight: 'bold',
+},
 });
 
 const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: pickerText,
-        paddingRight: 30,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'gray',
-        borderRadius: 8,
-        color: pickerText,
-        paddingRight: 30,
-    },
-    placeholder: {
-        color: pickerText,
-      },
+inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: pickerText,
+    paddingRight: 30,
+},
+inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: pickerText,
+    paddingRight: 30,
+},
+placeholder: {
+    color: pickerText,
+  },
 });

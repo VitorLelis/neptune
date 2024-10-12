@@ -1,4 +1,4 @@
-import { FlatList, Pressable, StyleSheet, Switch } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, Switch } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useEffect, useState } from 'react';
 import { useDatabase, Event, SwimmerTime } from '@/database/useDatabase';
@@ -23,7 +23,7 @@ export default function RanksScreen() {
       const response = await database.listEvents();
       setEventList(response);
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", String(error));;
     }
   }
 
@@ -33,7 +33,7 @@ export default function RanksScreen() {
       const resultRank = sortRank(response, isIndividual, genderSort);
       setRank(resultRank);
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", String(error));;
     }
   }
 

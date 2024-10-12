@@ -35,7 +35,7 @@ export default function RelayScreen() {
       const response = await database.listSwimmers();
       setSwimmersList(response);
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", String(error));;
     }
   }
 
@@ -60,8 +60,11 @@ export default function RelayScreen() {
   const calculateRelay = async () => {
     const swimmerSet = new Set(selectedSwimmers);
     if (swimmerSet.size < selectedSwimmers.length) {
-      Alert.alert("Error", "You cannot select the same swimmer more than once.");
-      return;
+      return Alert.alert("Error", "You cannot select the same swimmer more than once.");
+    }
+
+    if (!selectedRelay){
+      return Alert.alert("Error", "You have to select an event.");
     }
     const course = relayOptionMap[selectedRelay].course;
     const distance = relayOptionMap[selectedRelay].distance;
@@ -75,7 +78,7 @@ export default function RelayScreen() {
       setBestRelay(relay);
       setModalVisible(true);
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", String(error));;
     }
   };
 

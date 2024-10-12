@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Button, Alert, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, Platform, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import React, { useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
@@ -53,7 +53,7 @@ export default function AddSwimmersScreen() {
 
         Alert.alert("Time added!")
     } catch (error) {
-        console.log(error)
+        Alert.alert("Error", String(error));
     }
     
   }
@@ -113,8 +113,6 @@ export default function AddSwimmersScreen() {
     value={course}
     style={pickerSelectStyles}
 />
-     
-
       <TextInput
         style={styles.input}
         value={time}
@@ -157,13 +155,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     fontWeight: 'bold',
-  },
-  picker: {
-    height: 50,
-    width: '100%', // Full width for picker
-    marginBottom: 20,
-    borderColor: 'gray',
-    borderWidth: 1,
   },
   input: {
     height: 40,

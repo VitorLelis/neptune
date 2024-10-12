@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Button, Alert, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, Platform, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import React, { useState, useEffect } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
@@ -37,11 +37,16 @@ export default function EditTimeScreen() {
   }, [defaultTime, defaultDate, defaultEvent]);
 
   const parseEvent = (event: string) => {
-    const match = event.match(/^(\d+)m (\w+) \((\w{3})\)$/)
+    const match = event.match(/^(\d+)m (\w+[ \w+]*) \((\w{3})\)$/)
     if(match) {
       setDistance(match[1] || '50')
       setStroke(match[2] || 'Freestyle')
       setCourse(match[3] || 'SCM')
+    }
+    else{
+      setDistance('50')
+      setStroke('Freestyle')
+      setCourse('SCM')
     }
   }
 
@@ -76,7 +81,7 @@ export default function EditTimeScreen() {
 
         Alert.alert("Time updated!")
     } catch (error) {
-        console.log(error)
+        Alert.alert("Error", String(error));
     }
     
   }
@@ -135,8 +140,6 @@ export default function EditTimeScreen() {
     value={course}
     style={pickerSelectStyles}
 />
-     
-
       <TextInput
         style={styles.input}
         value={time}
@@ -179,13 +182,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     fontWeight: 'bold',
-  },
-  picker: {
-    height: 50,
-    width: '100%', // Full width for picker
-    marginBottom: 20,
-    borderColor: 'gray',
-    borderWidth: 1,
   },
   input: {
     height: 40,

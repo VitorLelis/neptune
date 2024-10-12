@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import React, { useState, useEffect } from 'react';
 import RNPickerSelect from 'react-native-picker-select'
@@ -41,7 +41,7 @@ export default function EditSwimmerScreen() {
 
       Alert.alert('Swimmer updated!');
     } catch (error) {
-      console.log(error);
+      Alert.alert("Error", String(error));
     }
   }
 
