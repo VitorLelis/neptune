@@ -1,8 +1,9 @@
-import { StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select'
 import { useDatabase } from '@/database/useDatabase';
+import { defaultBlue, defaultDark, defaultLight, pickerText } from '@/constants/Colors';
 
 export default function AddSwimmersScreen() {
   const [name, setName] = useState('');
@@ -17,7 +18,6 @@ export default function AddSwimmersScreen() {
             return Alert.alert("Year of Birth", "It must be a Number!")
         }
         await database.createSwimmer({name,gender,year_of_birth : Number(year_of_birth)})
-
         Alert.alert("Swimmer created!")
     } catch (error) {
         console.log(error)
@@ -27,34 +27,41 @@ export default function AddSwimmersScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
+      <Text style={styles.label}>NAME</Text>
       <TextInput
         style={styles.input}
         value={name}
         onChangeText={setName}
-        placeholder="Name"
-        placeholderTextColor="gray"  // To change placeholder text color
+        placeholder="Enter name"
+        placeholderTextColor={pickerText}
       />
 
-      <Picker
-        style={styles.picker}
-        selectedValue={gender}
-        onValueChange={(itemValue) => setGender(itemValue)}
-      >
-        <Picker.Item label="Male" value="M" />
-        <Picker.Item label="Female" value="F" />
-      </Picker>
+      <Text style={styles.label}>GENDER</Text>
+      <RNPickerSelect
+        onValueChange={(value) => setGender(value)}
+        items={[
+          { label: 'Male', value: 'M' },
+          { label: 'Female', value: 'F' },
+        ]}
+        style={pickerSelectStyles}
+        value={gender}
+      />
 
+      <Text style={styles.label}>YEAR OF BIRTH</Text>
       <TextInput
         style={styles.input}
         value={year_of_birth}
         onChangeText={setYear}
-        placeholder="Year of Birth"
-        placeholderTextColor="gray"  // To change placeholder text color
-        keyboardType="numeric"  // Ensure numeric keyboard for year input
+        placeholder=" Enter Year of Birth"
+        placeholderTextColor={pickerText}
+        keyboardType="numeric" 
       />
 
-    <Button title="Save" onPress={handleCreate} />
-
+      <TouchableOpacity style={styles.roundButton} onPress={handleCreate}>
+        <Text style={styles.buttonText}>SAVE</Text>
+      </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -66,25 +73,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  picker: {
-    height: 50,
-    width: '100%', // Full width for picker
-    marginBottom: 20,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: pickerText,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    borderRadius: 8,
+    paddingLeft: 8,
+    marginBottom: 16,
     width: '100%',
-    marginVertical: 10, // Slightly smaller margin for tighter spacing
+    color: pickerText
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  card: {
+    width: '100%',
+    padding: 20,
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  roundButton: {
+    borderRadius: 10, // Adjust this value for more or less rounding
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: defaultBlue, // You can change this to your desired color
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: defaultLight, // Text color
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
-
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: pickerText,
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: pickerText,
+    borderRadius: 8,
+    color: pickerText,
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});

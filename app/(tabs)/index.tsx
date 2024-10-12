@@ -3,6 +3,17 @@ import { Text, View } from '@/components/Themed';
 import { useDatabase, Swimmer } from '@/database/useDatabase';
 import React, { useEffect, useState } from 'react';
 import { router, useFocusEffect } from 'expo-router';
+import { defaultBlue, defaultDark, defaultLight } from '@/constants/Colors';
+import Foundation from '@expo/vector-icons/Foundation';
+
+type GenderIcon = "male-symbol" | "female-symbol"
+
+const genderIcon: { [key: string]: GenderIcon } = {
+  "M": "male-symbol",
+  "F": "female-symbol",
+}
+
+const currentYear:number = new Date().getFullYear()
 
 export default function SwimmersScreen() {
   const [swimmersList, setSwimmersList] = useState<Swimmer[]>([]);
@@ -48,7 +59,7 @@ export default function SwimmersScreen() {
       <TextInput
         style={styles.searchBar}
         placeholder="Search by name"
-        placeholderTextColor='#ccc'
+        placeholderTextColor={defaultBlue}
         value={searchQuery}
         onChangeText={handleSearch} // Update the search query
       />
@@ -58,8 +69,15 @@ export default function SwimmersScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }: { item: Swimmer }) => (
           <Pressable onPress={() => router.navigate(`/${item.id}`)}>
-            <View style={styles.item} lightColor="#fff" darkColor="#303030">
-              <Text>{item.name} - {item.gender} - {item.year_of_birth}</Text>
+            <View style={styles.item} lightColor={defaultLight} darkColor = {defaultDark}>
+              <Text style={styles.itemName}>{item.name.toUpperCase()}</Text>
+              <View style={styles.infoRow} lightColor={defaultLight} darkColor = {defaultDark}>
+                <Text style={styles.label}>
+                  Gender: <Foundation name={genderIcon[item.gender]} size={14} style={styles.icon}/>
+                </Text>
+                <Text style={styles.label}> Age: {new Date().getFullYear() - item.year_of_birth}</Text>
+                <Text style={styles.bornIn}> (born in {item.year_of_birth})</Text>
+              </View>
             </View>
           </Pressable>
         )}
@@ -75,12 +93,12 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: defaultBlue,
     borderWidth: 1,
     borderRadius: 8,
     paddingLeft: 8,
     marginBottom: 16,
-    color: '#ccc'
+    color: defaultBlue
   },
   item: {
     borderRadius: 10,
@@ -89,5 +107,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
+  },
+  itemName:{
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: defaultBlue,
+  },
+
+  infoRow: {
+    flexDirection: 'row',  // Align elements horizontally
+    alignItems: 'center',  // Vertically center items
+  },
+  label: {
+    fontSize: 14,
+    marginRight: 5,  // Adds space after the label text
+  },
+  icon: {
+    marginRight: 10,  // Adds space after the icon
+  },
+  bornIn: {
+    fontSize: 14,
+    color: 'grey',  // You can change the color or add different styling
   },
 })

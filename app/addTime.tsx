@@ -1,13 +1,15 @@
-import { StyleSheet, TextInput, Button, Alert, Platform } from 'react-native';
+import { StyleSheet, TextInput, Button, Alert, Platform, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import RNPickerSelect from 'react-native-picker-select';
 import { useDatabase } from '@/database/useDatabase';
 import { useLocalSearchParams } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome6';
 
 import stringToTime from '@/utils/stringToTime';
 import eventExist from '@/utils/eventExist';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { defaultBlue, defaultDark, defaultLight, pickerText } from '@/constants/Colors';
 
 export default function AddSwimmersScreen() {
     const [stroke, setStroke] = useState('Freestyle');
@@ -71,53 +73,61 @@ export default function AddSwimmersScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
+      <Text style={styles.label}>DISTANCE</Text>
+<RNPickerSelect
+    onValueChange={(value) => setDistance(value)}
+    items={[
+        { label: '50', value: '50' },
+        { label: '100', value: '100' },
+        { label: '200', value: '200' },
+        { label: '400', value: '400' },
+        { label: '800', value: '800' },
+        { label: '1500', value: '1500' }
+    ]}
+    value={distance}
+    style={pickerSelectStyles}
+/>
 
-      <Text>Distance</Text>
-      <Picker
-        selectedValue={distance}
-        style={styles.picker}
-        onValueChange={(itemValue) => setDistance(itemValue)}
-      >
-        <Picker.Item label="50" value="50" />
-        <Picker.Item label="100" value="100" />
-        <Picker.Item label="200" value="200" />
-        <Picker.Item label="400" value="400" />
-        <Picker.Item label="800" value="800" />
-        <Picker.Item label="1500" value="1500" />
-      </Picker>
+<Text style={styles.label}>STROKE</Text>
+<RNPickerSelect
+    onValueChange={(value) => setStroke(value)}
+    items={[
+        { label: 'Freestyle', value: 'Freestyle' },
+        { label: 'Backstroke', value: 'Backstroke' },
+        { label: 'Breaststroke', value: 'Breaststroke' },
+        { label: 'Butterfly', value: 'Butterfly' },
+        { label: 'Individual Medley', value: 'Individual Medley' }
+    ]}
+    value={stroke}
+    style={pickerSelectStyles}
+/>
 
-      <Text>Stroke</Text>
-      <Picker
-        selectedValue={stroke}
-        style={styles.picker}
-        onValueChange={(itemValue) => setStroke(itemValue)}
-      >
-        <Picker.Item label="Freestyle" value="Freestyle" />
-        <Picker.Item label="Backstroke" value="Backstroke" />
-        <Picker.Item label="Breaststroke" value="Breaststroke" />
-        <Picker.Item label="Butterfly" value="Butterfly" />
-        <Picker.Item label="Individual Medley" value="Individual Medley" />
-      </Picker>
-
-      <Text>Course</Text>
-      <Picker
-        selectedValue={course}
-        style={styles.picker}
-        onValueChange={(itemValue) => setCourse(itemValue)}
-      >
-        <Picker.Item label="SCM" value="SCM" />
-        <Picker.Item label="LCM" value="LCM" />
-      </Picker>
+<Text style={styles.label}>COURSE</Text>
+<RNPickerSelect
+    onValueChange={(value) => setCourse(value)}
+    items={[
+        { label: 'SCM', value: 'SCM' },
+        { label: 'LCM', value: 'LCM' }
+    ]}
+    value={course}
+    style={pickerSelectStyles}
+/>
+     
 
       <TextInput
         style={styles.input}
         value={time}
         onChangeText={setTime}
         placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
+        placeholderTextColor={pickerText}
       />
-
-      <Button title="Select Date" onPress={showDatePickerHandler} />
-      <Text>Selected Date: {formattedDate}</Text>
+      <View style={styles.dateRow} lightColor={defaultLight} darkColor={defaultDark}>
+      <Text style={styles.label}>DATE: {formattedDate}</Text>
+      <TouchableOpacity onPress={() => showDatePickerHandler()}>
+        <FontAwesome name="calendar" color={defaultBlue} size={18} />
+      </TouchableOpacity>
+      </View>
 
       {showDatePicker && (
         <RNDateTimePicker
@@ -128,8 +138,10 @@ export default function AddSwimmersScreen() {
         />
       )}
 
-    <Button title="Save" onPress={handleAddTime} />
-
+    <TouchableOpacity style={styles.roundButton} onPress={handleAddTime}>
+        <Text style={styles.buttonText}>SAVE</Text>
+    </TouchableOpacity>
+    </View>
     </View>
   );
 }
@@ -141,10 +153,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  title: {
-    fontSize: 24,
+  label: {
+    fontSize: 16,
+    marginBottom: 10,
     fontWeight: 'bold',
-    marginBottom: 30,
   },
   picker: {
     height: 50,
@@ -155,10 +167,66 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: pickerText,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    borderRadius: 8,
+    paddingLeft: 8,
+    marginBottom: 16,
     width: '100%',
-    marginVertical: 10, // Slightly smaller margin for tighter spacing
+    color: pickerText
+  },
+  dateRow: {
+    borderRadius: 5,
+    gap: 25,
+    flexDirection: "row",
+},
+  card: {
+    width: '100%',
+    padding: 20,
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  roundButton: {
+    borderRadius: 10, // Adjust this value for more or less rounding
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: defaultBlue, // You can change this to your desired color
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: defaultLight, // Text color
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: pickerText,
+    borderRadius: 4,
+    color: pickerText,
+    paddingRight: 30,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: pickerText,
+    borderRadius: 8,
+    color: pickerText,
+    paddingRight: 30,
+  },
+  placeholder: {
+    color: pickerText,
   },
 });

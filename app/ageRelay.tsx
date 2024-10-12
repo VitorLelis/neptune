@@ -1,5 +1,6 @@
 import { StyleSheet, FlatList } from 'react-native';
 import { Text, View } from '@/components/Themed';
+import { defaultDark, defaultLight } from '@/constants/Colors';
 
 export default function AgeGroupScreen() {
   const ageGroups = [
@@ -15,18 +16,20 @@ export default function AgeGroupScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
       <FlatList
         data={ageGroups}
         keyExtractor={(item) => item.group}
         renderItem={({ item }) => (
-          <View style={styles.row}>
+          <View style={styles.row} lightColor={defaultLight} darkColor={defaultDark}>
             <Text style={styles.group}>{item.group}</Text>
             <Text style={styles.range}>{item.range}</Text>
           </View>
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-      <Text>Increment by 40 for each new Group</Text>
+      <Text style={styles.footer}>Increment by 40 for each new Group</Text>
+      </View>
     </View>
   );
 }
@@ -60,5 +63,19 @@ const styles = StyleSheet.create({
     height: 1,
     width: '100%',
     backgroundColor: '#ccc',
+  },
+  card: {
+    width: '100%',
+    padding: 20,
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  footer: {
+    marginTop: 15,
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
