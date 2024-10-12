@@ -25,18 +25,21 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: 'Swimmers',
-          tabBarIcon: ({ color }) => <TabBarIcon name="person-swimming" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='person-swimming' color={color} />
+          ),
           headerRight: () => (
-            <Link href="/addSwimmer" asChild>
+            <Link href='/addSwimmer' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
-                    name="user-plus"
+                    name='user-plus'
                     size={25}
                     color={Colors[colorScheme ?? 'light'].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
@@ -48,16 +51,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="relay"
+        name='relay'
         options={{
           title: 'Relay Setup',
-          tabBarIcon: ({ color }) => <TabBarIcon name="stopwatch" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='stopwatch' color={color} />
+          ),
           headerRight: () => (
-            <Link href="/ageRelay" asChild>
+            <Link href='/ageRelay' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
-                    name="circle-info"
+                    name='circle-info'
                     size={25}
                     color={Colors[colorScheme ?? 'light'].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
@@ -69,17 +74,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ranks"
+        name='ranks'
         options={{
           title: 'Rankings',
-          tabBarIcon: ({ color }) => <TabBarIcon name="ranking-star" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='ranking-star' color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="converter"
+        name='converter'
         options={{
           title: 'Time Converter',
-          tabBarIcon: ({ color }) => <TabBarIcon name="clock-rotate-left" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name='clock-rotate-left' color={color} />
+          ),
         }}
       />
     </Tabs>

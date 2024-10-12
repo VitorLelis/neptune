@@ -12,23 +12,31 @@ export default function AgeGroupScreen() {
     { group: 'Group 5', range: '240 – 279' },
     { group: 'Group 6', range: '280 – 319' },
     { group: 'Group 7', range: '320 – 359' },
-  ]
+  ];
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
-      <FlatList
-        data={ageGroups}
-        keyExtractor={(item) => item.group}
-        renderItem={({ item }) => (
-          <View style={styles.row} lightColor={defaultLight} darkColor={defaultDark}>
-            <Text style={styles.group}>{item.group}</Text>
-            <Text style={styles.range}>{item.range}</Text>
-          </View>
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
-      <Text style={styles.footer}>Increment by 40 for each new Group</Text>
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
+        <FlatList
+          data={ageGroups}
+          keyExtractor={item => item.group}
+          renderItem={({ item }) => (
+            <View
+              style={styles.row}
+              lightColor={defaultLight}
+              darkColor={defaultDark}
+            >
+              <Text style={styles.group}>{item.group}</Text>
+              <Text style={styles.range}>{item.range}</Text>
+            </View>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+        <Text style={styles.footer}>Increment by 40 for each new Group</Text>
       </View>
     </View>
   );

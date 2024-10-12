@@ -1,8 +1,8 @@
-export const defaultBlue = "#3368C4"
-export const defaultDark = "#303030"
-export const defaultLight = "#fff"
-export const pickerText = "#7F8CA3"
-export const switchOn = "#92ACDA"
+export const defaultBlue = '#3368C4';
+export const defaultDark = '#303030';
+export const defaultLight = '#fff';
+export const pickerText = '#7F8CA3';
+export const switchOn = '#92ACDA';
 
 export default {
   light: {

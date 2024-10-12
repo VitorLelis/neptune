@@ -7,7 +7,13 @@ import { router, useFocusEffect } from 'expo-router';
 import timeToString from '@/utils/timeToString';
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import { defaultBlue, defaultDark, defaultLight, pickerText, switchOn } from '@/constants/Colors';
+import {
+  defaultBlue,
+  defaultDark,
+  defaultLight,
+  pickerText,
+  switchOn,
+} from '@/constants/Colors';
 
 export default function RanksScreen() {
   const [eventList, setEventList] = useState<Event[]>([]);
@@ -23,7 +29,7 @@ export default function RanksScreen() {
       const response = await database.listEvents();
       setEventList(response);
     } catch (error) {
-      Alert.alert("Error", String(error));;
+      Alert.alert('Error', String(error));
     }
   }
 
@@ -33,7 +39,7 @@ export default function RanksScreen() {
       const resultRank = sortRank(response, isIndividual, genderSort);
       setRank(resultRank);
     } catch (error) {
-      Alert.alert("Error", String(error));;
+      Alert.alert('Error', String(error));
     }
   }
 
@@ -47,62 +53,73 @@ export default function RanksScreen() {
   useFocusEffect(
     React.useCallback(() => {
       getEventList();
-    }, [])
+    }, []),
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
-      <Text style={styles.label}>EVENT</Text>
-      <RNPickerSelect
-        onValueChange={(value) => setEventId(value)}
-        items={eventList.map(event => ({
-          label: `${event.distance}m ${event.stroke} (${event.course})`,
-          value: event.id,
-        }))}
-        style={pickerSelectStyles}
-        placeholder={{ label: "Select an Event", value: null }}
-      />
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
+        <Text style={styles.label}>EVENT</Text>
+        <RNPickerSelect
+          onValueChange={value => setEventId(value)}
+          items={eventList.map(event => ({
+            label: `${event.distance}m ${event.stroke} (${event.course})`,
+            value: event.id,
+          }))}
+          style={pickerSelectStyles}
+          placeholder={{ label: 'Select an Event', value: null }}
+        />
 
-      <View style={styles.switchContainer} lightColor={defaultLight} darkColor={defaultDark}>
-        <Text style={styles.label}>INDIVIDUAL</Text>
-        <Switch
-          value={isIndividual}
-          onValueChange={(value) => {
-            setIsIndividual(value);
+        <View
+          style={styles.switchContainer}
+          lightColor={defaultLight}
+          darkColor={defaultDark}
+        >
+          <Text style={styles.label}>INDIVIDUAL</Text>
+          <Switch
+            value={isIndividual}
+            onValueChange={value => {
+              setIsIndividual(value);
+              getRankList();
+            }}
+            trackColor={{ false: pickerText, true: switchOn }}
+            thumbColor={defaultBlue}
+          />
+        </View>
+
+        <Text style={styles.label}>GENDER</Text>
+        <RNPickerSelect
+          onValueChange={value => {
+            setGenderSort(value);
             getRankList();
           }}
-          trackColor={{ false: pickerText, true: switchOn }}
-          thumbColor={defaultBlue}
+          items={[
+            { label: 'None', value: 'None' },
+            { label: 'Male', value: 'M' },
+            { label: 'Female', value: 'F' },
+          ]}
+          style={pickerSelectStyles}
+          placeholder={{ label: 'Select Gender', value: null }}
         />
-      </View>
 
-      <Text style={styles.label}>GENDER</Text>
-      <RNPickerSelect
-        onValueChange={(value) => {
-          setGenderSort(value);
-          getRankList();
-        }}
-        items={[
-          { label: "None", value: "None" },
-          { label: "Male", value: "M" },
-          { label: "Female", value: "F" },
-        ]}
-        style={pickerSelectStyles}
-        placeholder={{ label: "Select Gender", value: null }}
-      />
-
-      <FlatList
-        data={rank}
-        keyExtractor={(item, index) => `${item.id}-${index}`} // Combine id and index to ensure uniqueness
-        renderItem={({ item, index }) => (
-          <Pressable onPress={() => router.navigate(`/${item.id}`)}>
-            <View style={styles.item}>
-              <Text style={styles.itemText}>({index + 1}) {item.name} - {timeToString(item.time)} - {item.date}</Text>
-            </View>
-          </Pressable>
-        )}
-      />
+        <FlatList
+          data={rank}
+          keyExtractor={(item, index) => `${item.id}-${index}`} // Combine id and index to ensure uniqueness
+          renderItem={({ item, index }) => (
+            <Pressable onPress={() => router.navigate(`/${item.id}`)}>
+              <View style={styles.item}>
+                <Text style={styles.itemText}>
+                  ({index + 1}) {item.name} - {timeToString(item.time)} -{' '}
+                  {item.date}
+                </Text>
+              </View>
+            </Pressable>
+          )}
+        />
       </View>
     </View>
   );
@@ -127,17 +144,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
   },
-  itemText:{
-    color: 'white'
+  itemText: {
+    color: 'white',
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   card: {
-    alignSelf: 'stretch',    // Takes full width of the container
-    maxHeight: 600,           // Optional: limit width on larger screens
+    alignSelf: 'stretch', // Takes full width of the container
+    maxHeight: 600, // Optional: limit width on larger screens
     padding: 20,
     borderRadius: 10,
     shadowOffset: { width: 0, height: 2 },

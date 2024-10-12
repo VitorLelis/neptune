@@ -1,13 +1,23 @@
 import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import React, { useState, useEffect } from 'react';
-import RNPickerSelect from 'react-native-picker-select'
+import RNPickerSelect from 'react-native-picker-select';
 import { useDatabase } from '@/database/useDatabase';
 import { useLocalSearchParams } from 'expo-router';
-import { defaultLight, defaultDark, pickerText, defaultBlue } from '@/constants/Colors';
+import {
+  defaultLight,
+  defaultDark,
+  pickerText,
+  defaultBlue,
+} from '@/constants/Colors';
 
 export default function EditSwimmerScreen() {
-  const { id: defaultId, name: defaultName, gender: defaultGender, year_of_birth: defaultYear } = useLocalSearchParams() as {
+  const {
+    id: defaultId,
+    name: defaultName,
+    gender: defaultGender,
+    year_of_birth: defaultYear,
+  } = useLocalSearchParams() as {
     id?: string;
     name?: string;
     gender?: string;
@@ -41,46 +51,50 @@ export default function EditSwimmerScreen() {
 
       Alert.alert('Swimmer updated!');
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert('Error', String(error));
     }
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
-      <Text style={styles.label}>NAME</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter name"
-        placeholderTextColor={pickerText}
-      />
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
+        <Text style={styles.label}>NAME</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder='Enter name'
+          placeholderTextColor={pickerText}
+        />
 
-      <Text style={styles.label}>GENDER</Text>
-      <RNPickerSelect
-        onValueChange={(value) => setGender(value)}
-        items={[
-          { label: 'Male', value: 'M' },
-          { label: 'Female', value: 'F' },
-        ]}
-        style={pickerSelectStyles}
-        value={gender}
-      />
+        <Text style={styles.label}>GENDER</Text>
+        <RNPickerSelect
+          onValueChange={value => setGender(value)}
+          items={[
+            { label: 'Male', value: 'M' },
+            { label: 'Female', value: 'F' },
+          ]}
+          style={pickerSelectStyles}
+          value={gender}
+        />
 
-      <Text style={styles.label}>YEAR OF BIRTH</Text>
-      <TextInput
-        style={styles.input}
-        value={year_of_birth}
-        onChangeText={setYear}
-        placeholder=" Enter Year of Birth"
-        placeholderTextColor={pickerText}
-        keyboardType="numeric" 
-      />
+        <Text style={styles.label}>YEAR OF BIRTH</Text>
+        <TextInput
+          style={styles.input}
+          value={year_of_birth}
+          onChangeText={setYear}
+          placeholder=' Enter Year of Birth'
+          placeholderTextColor={pickerText}
+          keyboardType='numeric'
+        />
 
-      <TouchableOpacity style={styles.roundButton} onPress={handleUpdate}>
-        <Text style={styles.buttonText}>SAVE</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.roundButton} onPress={handleUpdate}>
+          <Text style={styles.buttonText}>SAVE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -91,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20, // Added padding for better layout
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   input: {
     height: 40,
@@ -101,7 +115,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     marginBottom: 16,
     width: '100%',
-    color: pickerText
+    color: pickerText,
   },
   label: {
     fontSize: 16,

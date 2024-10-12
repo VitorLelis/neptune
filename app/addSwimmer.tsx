@@ -1,66 +1,78 @@
 import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useState } from 'react';
-import RNPickerSelect from 'react-native-picker-select'
+import RNPickerSelect from 'react-native-picker-select';
 import { useDatabase } from '@/database/useDatabase';
-import { defaultBlue, defaultDark, defaultLight, pickerText } from '@/constants/Colors';
+import {
+  defaultBlue,
+  defaultDark,
+  defaultLight,
+  pickerText,
+} from '@/constants/Colors';
 
 export default function AddSwimmersScreen() {
   const [name, setName] = useState('');
   const [gender, setGender] = useState('M');
   const [year_of_birth, setYear] = useState('');
 
-  const database = useDatabase()
+  const database = useDatabase();
 
-  async function handleCreate(){
+  async function handleCreate() {
     try {
-        if (isNaN(Number(year_of_birth))){
-            return Alert.alert("Year of Birth", "It must be a Number!")
-        }
-        await database.createSwimmer({name,gender,year_of_birth : Number(year_of_birth)})
-        Alert.alert("Swimmer created!")
+      if (isNaN(Number(year_of_birth))) {
+        return Alert.alert('Year of Birth', 'It must be a Number!');
+      }
+      await database.createSwimmer({
+        name,
+        gender,
+        year_of_birth: Number(year_of_birth),
+      });
+      Alert.alert('Swimmer created!');
     } catch (error) {
-        Alert.alert("Error", String(error));
+      Alert.alert('Error', String(error));
     }
-    
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
-      <Text style={styles.label}>NAME</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter name"
-        placeholderTextColor={pickerText}
-      />
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
+        <Text style={styles.label}>NAME</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder='Enter name'
+          placeholderTextColor={pickerText}
+        />
 
-      <Text style={styles.label}>GENDER</Text>
-      <RNPickerSelect
-        onValueChange={(value) => setGender(value)}
-        items={[
-          { label: 'Male', value: 'M' },
-          { label: 'Female', value: 'F' },
-        ]}
-        style={pickerSelectStyles}
-        value={gender}
-      />
+        <Text style={styles.label}>GENDER</Text>
+        <RNPickerSelect
+          onValueChange={value => setGender(value)}
+          items={[
+            { label: 'Male', value: 'M' },
+            { label: 'Female', value: 'F' },
+          ]}
+          style={pickerSelectStyles}
+          value={gender}
+        />
 
-      <Text style={styles.label}>YEAR OF BIRTH</Text>
-      <TextInput
-        style={styles.input}
-        value={year_of_birth}
-        onChangeText={setYear}
-        placeholder=" Enter Year of Birth"
-        placeholderTextColor={pickerText}
-        keyboardType="numeric" 
-      />
+        <Text style={styles.label}>YEAR OF BIRTH</Text>
+        <TextInput
+          style={styles.input}
+          value={year_of_birth}
+          onChangeText={setYear}
+          placeholder=' Enter Year of Birth'
+          placeholderTextColor={pickerText}
+          keyboardType='numeric'
+        />
 
-      <TouchableOpacity style={styles.roundButton} onPress={handleCreate}>
-        <Text style={styles.buttonText}>SAVE</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.roundButton} onPress={handleCreate}>
+          <Text style={styles.buttonText}>SAVE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -71,7 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20, // Added padding for better layout
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   input: {
     height: 40,
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     marginBottom: 16,
     width: '100%',
-    color: pickerText
+    color: pickerText,
   },
   label: {
     fontSize: 16,

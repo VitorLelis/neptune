@@ -7,25 +7,35 @@ import timeToString from '@/utils/timeToString';
 import { useFocusEffect } from 'expo-router';
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import { defaultBlue, defaultDark, defaultLight, pickerText } from '@/constants/Colors';
+import {
+  defaultBlue,
+  defaultDark,
+  defaultLight,
+  pickerText,
+} from '@/constants/Colors';
 
 const gender: { [key: string]: string } = {
-  "M": "Male",
-  "F": "Female",
-}
-
-const relayOptionMap: {[key:string]: {course:string, distance: number}} = {
-  "4x50m Medley Relay (SCM)": { course: "SCM", distance: 50 },
-  "4x50m Medley Relay (LCM)": { course: "LCM", distance: 50 },
-  "4x100m Medley Relay (SCM)": { course: "SCM", distance: 100 },
-  "4x100m Medley Relay (LCM)": { course: "LCM", distance: 100 },
+  M: 'Male',
+  F: 'Female',
 };
+
+const relayOptionMap: { [key: string]: { course: string; distance: number } } =
+  {
+    '4x50m Medley Relay (SCM)': { course: 'SCM', distance: 50 },
+    '4x50m Medley Relay (LCM)': { course: 'LCM', distance: 50 },
+    '4x100m Medley Relay (SCM)': { course: 'SCM', distance: 100 },
+    '4x100m Medley Relay (LCM)': { course: 'LCM', distance: 100 },
+  };
 
 export default function RelayScreen() {
   const [swimmersList, setSwimmersList] = useState<Swimmer[]>([]);
-  const [selectedSwimmers, setSelectedSwimmers] = useState<number[]>([0, 0, 0, 0]);
+  const [selectedSwimmers, setSelectedSwimmers] = useState<number[]>([
+    0, 0, 0, 0,
+  ]);
   const [bestRelay, setBestRelay] = useState<Relay | null>(null);
-  const [selectedRelay, setSelectedRelay] = useState<string>("4x50m Medley Relay (SCM)");
+  const [selectedRelay, setSelectedRelay] = useState<string>(
+    '4x50m Medley Relay (SCM)',
+  );
   const [modalVisible, setModalVisible] = useState(false);
 
   const database = useDatabase();
@@ -35,7 +45,7 @@ export default function RelayScreen() {
       const response = await database.listSwimmers();
       setSwimmersList(response);
     } catch (error) {
-      Alert.alert("Error", String(error));;
+      Alert.alert('Error', String(error));
     }
   }
 
@@ -46,11 +56,11 @@ export default function RelayScreen() {
   useFocusEffect(
     React.useCallback(() => {
       getSwimmers();
-    }, [])
+    }, []),
   );
 
   const handleSwimmerChange = (index: number, swimmerId: number) => {
-    setSelectedSwimmers((prevSelected) => {
+    setSelectedSwimmers(prevSelected => {
       const updatedSwimmers = [...prevSelected];
       updatedSwimmers[index] = swimmerId;
       return updatedSwimmers;
@@ -60,25 +70,30 @@ export default function RelayScreen() {
   const calculateRelay = async () => {
     const swimmerSet = new Set(selectedSwimmers);
     if (swimmerSet.size < selectedSwimmers.length) {
-      return Alert.alert("Error", "You cannot select the same swimmer more than once.");
+      return Alert.alert(
+        'Error',
+        'You cannot select the same swimmer more than once.',
+      );
     }
 
-    if (!selectedRelay){
-      return Alert.alert("Error", "You have to select an event.");
+    if (!selectedRelay) {
+      return Alert.alert('Error', 'You have to select an event.');
     }
     const course = relayOptionMap[selectedRelay].course;
     const distance = relayOptionMap[selectedRelay].distance;
 
     try {
       const swimmerRelays = await Promise.all(
-        selectedSwimmers.map((id) => database.getSwimmerRelay(id, course, distance))
+        selectedSwimmers.map(id =>
+          database.getSwimmerRelay(id, course, distance),
+        ),
       );
       const allSwimmerRelays = swimmerRelays.flat();
       const relay = makeRelay(allSwimmerRelays);
       setBestRelay(relay);
       setModalVisible(true);
     } catch (error) {
-      Alert.alert("Error", String(error));;
+      Alert.alert('Error', String(error));
     }
   };
 
@@ -89,40 +104,55 @@ export default function RelayScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
         <Text style={styles.label}>SELECT RELAY</Text>
         <RNPickerSelect
           style={pickerSelectStyles}
-          onValueChange={(itemValue) => setSelectedRelay(itemValue)}
+          onValueChange={itemValue => setSelectedRelay(itemValue)}
           value={selectedRelay}
-          items={Object.keys(relayOptionMap).map((opt) => ({
+          items={Object.keys(relayOptionMap).map(opt => ({
             label: opt,
-            value: opt
+            value: opt,
           }))}
           placeholder={{ label: 'Select an option', value: null }}
         />
 
-        <View style={styles.gridContainer} lightColor={defaultLight} darkColor={defaultDark}>
+        <View
+          style={styles.gridContainer}
+          lightColor={defaultLight}
+          darkColor={defaultDark}
+        >
           {[1, 2, 3, 4].map((id, index) => (
-            <View key={index} style={styles.gridItem} lightColor={defaultLight} darkColor={defaultDark}>
+            <View
+              key={index}
+              style={styles.gridItem}
+              lightColor={defaultLight}
+              darkColor={defaultDark}
+            >
               <Text style={styles.label}>SWIMMER #{id}</Text>
               <RNPickerSelect
                 style={pickerSelectStyles}
-                onValueChange={(itemValue) => handleSwimmerChange(index, itemValue)}
+                onValueChange={itemValue =>
+                  handleSwimmerChange(index, itemValue)
+                }
                 value={selectedSwimmers[index]}
                 placeholder={{ label: 'Select Swimmer', value: 0 }}
-                items={swimmersList.map((swimmer) => ({
+                items={swimmersList.map(swimmer => ({
                   label: `${swimmer.name} (${gender[swimmer.gender]}, born in ${swimmer.year_of_birth})`,
-                  value: swimmer.id
+                  value: swimmer.id,
                 }))}
               />
             </View>
           ))}
         </View>
 
-        <TouchableOpacity 
-          style={styles.customButton} 
-          onPress={calculateRelay} 
+        <TouchableOpacity
+          style={styles.customButton}
+          onPress={calculateRelay}
           disabled={selectedSwimmers.includes(0)}
         >
           <Text style={styles.buttonText}>CALCULATE RELAY</Text>
@@ -131,34 +161,52 @@ export default function RelayScreen() {
 
       <Modal
         visible={modalVisible}
-        animationType="none"
+        animationType='none'
         transparent={true}
         onRequestClose={closeModal}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent} lightColor={defaultLight} darkColor={defaultDark}>
+          <View
+            style={styles.modalContent}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.resultTitle}>BEST RELAY</Text>
             {bestRelay && (
-               <View style={styles.resultContainer} lightColor={defaultLight} darkColor={defaultDark}>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Backstroke:</Text> {bestRelay.backstroke.name} - {timeToString(bestRelay.backstroke.time)}
-               </Text>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Breaststroke:</Text> {bestRelay.breaststroke.name} - {timeToString(bestRelay.breaststroke.time)}
-               </Text>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Butterfly:</Text> {bestRelay.butterfly.name} - {timeToString(bestRelay.butterfly.time)}
-               </Text>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Freestyle:</Text> {bestRelay.freestyle.name} - {timeToString(bestRelay.freestyle.time)}
-               </Text>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Total Time:</Text> {timeToString(bestRelay.totalTime)}
-               </Text>
-               <Text style={styles.resultText}>
-                 <Text style={styles.resultLabel}>Age Group (Masters):</Text> {bestRelay.ageGroup}
-               </Text>
-             </View> 
+              <View
+                style={styles.resultContainer}
+                lightColor={defaultLight}
+                darkColor={defaultDark}
+              >
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Backstroke:</Text>{' '}
+                  {bestRelay.backstroke.name} -{' '}
+                  {timeToString(bestRelay.backstroke.time)}
+                </Text>
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Breaststroke:</Text>{' '}
+                  {bestRelay.breaststroke.name} -{' '}
+                  {timeToString(bestRelay.breaststroke.time)}
+                </Text>
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Butterfly:</Text>{' '}
+                  {bestRelay.butterfly.name} -{' '}
+                  {timeToString(bestRelay.butterfly.time)}
+                </Text>
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Freestyle:</Text>{' '}
+                  {bestRelay.freestyle.name} -{' '}
+                  {timeToString(bestRelay.freestyle.time)}
+                </Text>
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Total Time:</Text>{' '}
+                  {timeToString(bestRelay.totalTime)}
+                </Text>
+                <Text style={styles.resultText}>
+                  <Text style={styles.resultLabel}>Age Group (Masters):</Text>{' '}
+                  {bestRelay.ageGroup}
+                </Text>
+              </View>
             )}
 
             {!bestRelay && (
@@ -166,10 +214,7 @@ export default function RelayScreen() {
                 <Text style={styles.resultText}>Not enough information</Text>
               </>
             )}
-            <TouchableOpacity 
-              style={styles.customButton} 
-              onPress={closeModal}
-            >
+            <TouchableOpacity style={styles.customButton} onPress={closeModal}>
               <Text style={styles.buttonText}>CLOSE</Text>
             </TouchableOpacity>
           </View>
@@ -277,7 +322,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white', // Button text color
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });
-

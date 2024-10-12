@@ -1,5 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -54,15 +58,26 @@ function RootLayoutNav() {
   return (
     <SQLiteProvider databaseName='neptune.db' onInit={initDatabase}>
       <ActionSheetProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
           <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="[id]" options={{ title: "Swimmmer Info" }} />
-            <Stack.Screen name="addSwimmer" options={{ title: "Add New Swimmer"}} />
-            <Stack.Screen name="editSwimmer" options={{ title: "Edit Swimmer Info"}} />
-            <Stack.Screen name="addTime" options={{ title: "Add New Time"}} />
-            <Stack.Screen name="editTime" options={{ title: "Edit Time"}} />
-            <Stack.Screen name="ageRelay" options={{ title: "Age Groups for Masters"}} />
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen name='[id]' options={{ title: 'Swimmmer Info' }} />
+            <Stack.Screen
+              name='addSwimmer'
+              options={{ title: 'Add New Swimmer' }}
+            />
+            <Stack.Screen
+              name='editSwimmer'
+              options={{ title: 'Edit Swimmer Info' }}
+            />
+            <Stack.Screen name='addTime' options={{ title: 'Add New Time' }} />
+            <Stack.Screen name='editTime' options={{ title: 'Edit Time' }} />
+            <Stack.Screen
+              name='ageRelay'
+              options={{ title: 'Age Groups for Masters' }}
+            />
           </Stack>
         </ThemeProvider>
       </ActionSheetProvider>

@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
-import { StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select'
-import { Text, View } from '@/components/Themed'
-import { convertTime } from '@/utils/conversionUtils'
-import { defaultBlue, defaultDark, defaultLight, pickerText } from '@/constants/Colors'
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import { Text, View } from '@/components/Themed';
+import { convertTime } from '@/utils/conversionUtils';
+import {
+  defaultBlue,
+  defaultDark,
+  defaultLight,
+  pickerText,
+} from '@/constants/Colors';
 
 export default function ConverterScreen() {
   const [stroke, setStroke] = useState('Freestyle');
@@ -16,7 +21,13 @@ export default function ConverterScreen() {
 
   const handleConvert = () => {
     try {
-      const convertedTime = convertTime(time, stroke, distance, originalCourse, targetCourse);
+      const convertedTime = convertTime(
+        time,
+        stroke,
+        distance,
+        originalCourse,
+        targetCourse,
+      );
       setResult(convertedTime);
     } catch (error) {
       setResult('Error: ' + (error as Error).message);
@@ -31,27 +42,43 @@ export default function ConverterScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.card} lightColor={defaultLight} darkColor={defaultDark}>
-        <View style={styles.row} lightColor={defaultLight} darkColor={defaultDark}>
-          <View style={styles.column} lightColor={defaultLight} darkColor={defaultDark}>
+      <View
+        style={styles.card}
+        lightColor={defaultLight}
+        darkColor={defaultDark}
+      >
+        <View
+          style={styles.row}
+          lightColor={defaultLight}
+          darkColor={defaultDark}
+        >
+          <View
+            style={styles.column}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.label}>STROKE</Text>
             <RNPickerSelect
-              onValueChange={(value) => setStroke(value)}
+              onValueChange={value => setStroke(value)}
               items={[
-                { label: 'Freestyle', value: 'Freestyle'},
-                { label: 'Backstroke', value: 'Backstroke'},
-                { label: 'Breaststroke', value: 'Breaststroke'},
-                { label: 'Butterfly', value: 'Butterfly'},
+                { label: 'Freestyle', value: 'Freestyle' },
+                { label: 'Backstroke', value: 'Backstroke' },
+                { label: 'Breaststroke', value: 'Breaststroke' },
+                { label: 'Butterfly', value: 'Butterfly' },
               ]}
               style={pickerSelectStyles}
               value={stroke}
             />
           </View>
 
-          <View style={styles.column} lightColor={defaultLight} darkColor={defaultDark}>
+          <View
+            style={styles.column}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.label}>DISTANCE</Text>
             <RNPickerSelect
-              onValueChange={(value) => setDistance(value)}
+              onValueChange={value => setDistance(value)}
               items={[
                 { label: '50', value: '50' },
                 { label: '100', value: '100' },
@@ -66,11 +93,19 @@ export default function ConverterScreen() {
           </View>
         </View>
 
-        <View style={styles.row} lightColor={defaultLight} darkColor={defaultDark}>
-          <View style={styles.column} lightColor={defaultLight} darkColor={defaultDark}>
+        <View
+          style={styles.row}
+          lightColor={defaultLight}
+          darkColor={defaultDark}
+        >
+          <View
+            style={styles.column}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.label}>ORIGINAL COURSE</Text>
             <RNPickerSelect
-              onValueChange={(value) => setOriginalCourse(value)}
+              onValueChange={value => setOriginalCourse(value)}
               items={[
                 { label: 'SCM', value: 'SCM' },
                 { label: 'LCM', value: 'LCM' },
@@ -80,10 +115,14 @@ export default function ConverterScreen() {
             />
           </View>
 
-          <View style={styles.column} lightColor={defaultLight} darkColor={defaultDark}>
+          <View
+            style={styles.column}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.label}>TARGET COURSE</Text>
             <RNPickerSelect
-              onValueChange={(value) => setTargetCourse(value)}
+              onValueChange={value => setTargetCourse(value)}
               items={[
                 { label: 'SCM', value: 'SCM' },
                 { label: 'LCM', value: 'LCM' },
@@ -94,12 +133,16 @@ export default function ConverterScreen() {
           </View>
         </View>
 
-        <View style={styles.inputContainer} lightColor={defaultLight} darkColor={defaultDark}>
+        <View
+          style={styles.inputContainer}
+          lightColor={defaultLight}
+          darkColor={defaultDark}
+        >
           <TextInput
             style={styles.input}
             value={time}
             onChangeText={setTime}
-            placeholder="Enter time (MIN:SEC.HH or SEC.HH)"
+            placeholder='Enter time (MIN:SEC.HH or SEC.HH)'
             placeholderTextColor={pickerText}
           />
           <TouchableOpacity style={styles.roundButton} onPress={handleConvert}>
@@ -110,17 +153,24 @@ export default function ConverterScreen() {
 
       <Modal
         visible={modalVisible}
-        animationType="none"
+        animationType='none'
         transparent={true}
         onRequestClose={closeModal}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent} lightColor={defaultLight} darkColor={defaultDark}>
+          <View
+            style={styles.modalContent}
+            lightColor={defaultLight}
+            darkColor={defaultDark}
+          >
             <Text style={styles.title}>RESULT</Text>
-            <Text style={styles.result}>{result}</Text>
+            <Text style={styles.result}>{result}*</Text>
             <TouchableOpacity style={styles.roundButton} onPress={closeModal}>
               <Text style={styles.buttonText}>CLOSE</Text>
             </TouchableOpacity>
+            <Text style={styles.footerText}>
+              *The result is only an estimation.
+            </Text>
           </View>
         </View>
       </Modal>
@@ -195,7 +245,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     marginBottom: 16,
     width: '100%',
-    color: pickerText
+    color: pickerText,
   },
   modalContainer: {
     flex: 1,
@@ -232,5 +282,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  footerText: {
+    marginTop: 10,
+    fontSize: 12,
+    textAlign: 'center',
+  },
 });
-
