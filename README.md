@@ -24,7 +24,7 @@ Neptune is a mobile app built with [Expo](https://expo.dev/), [React Native](htt
    ```
 
 2. **Install Dependencies**:
-   Ensure you have [Node.js](https://nodejs.org/) installed. Then install dependencies:
+   Ensure you have [Node.js](https://nodejs.org/) and [Expo](https://docs.expo.dev/) installed. Then install dependencies:
    ```bash
    npm install
    # or
