@@ -19,7 +19,7 @@ Neptune is a mobile app built with [Expo](https://expo.dev/), [React Native](htt
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/neptune.git
+   git clone https://github.com/VitorLelis/neptune.git
    cd neptune
    ```
 
